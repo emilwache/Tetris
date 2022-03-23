@@ -44,9 +44,12 @@ public class Tetris extends Application {
         btnPlay = new Button("PLAY");
         btnPlay.setPrefWidth(150);
         btnPlay.setPrefHeight(40);
+        btnPlay.setId("playBtn");
+        btnPlay.getStyleClass().add("start-buttons");
         btnLevel = new Button("Level 1");
         btnLevel.setPrefWidth(150);
         btnLevel.setPrefHeight(40);
+        btnLevel.getStyleClass().add("start-buttons");
 
         scoreView = new ListView();
         scoreView.setMinHeight(300);
@@ -61,13 +64,14 @@ public class Tetris extends Application {
         smallBox = new VBox(nameBox, playBox, lvlBox, scoreBox);
         smallBox.setPrefWidth(300);
         smallBox.setPrefHeight(500);
-        smallBox.setStyle("-fx-background: rgba(38,35,35,0.98); -fx-effect: dropshadow(three-pass-box, rgba(0, 0, 0, 0.8), 100, 0, 0, 0);");
+        smallBox.setId("smallBox");
+        //smallBox.setStyle("-fx-background: rgba(38,35,35,0.98); -fx-effect: dropshadow(three-pass-box, rgba(0, 0, 0, 0.8), 100, 0, 0, 0);");
         smallBox.setPadding(new Insets(20, 20, 20, 20));
         VBox.setMargin(smallBox, new Insets(50, 0, 0, 0));
         mainVBox = new VBox(smallBox);
         box = new HBox(mainVBox);
         box.setAlignment(Pos.CENTER);
-        FileInputStream fi = new FileInputStream("C:\\Users\\emilo\\IdeaProjects\\POS-Project_TetrisGame_Szhukalek_Wache\\src\\main\\java\\view\\img.png");
+        FileInputStream fi = new FileInputStream("src/main/java/view/img.png");
         Image img = new Image(fi);
         BackgroundImage bImg = new BackgroundImage(img, BackgroundRepeat.NO_REPEAT,BackgroundRepeat.NO_REPEAT, BackgroundPosition.DEFAULT, BackgroundSize.DEFAULT);
         Background background = new Background(bImg);
@@ -81,6 +85,9 @@ public class Tetris extends Application {
         VBox.setMargin(scoreBox, new Insets(10,0,0,0));
 
         scene = new Scene(box, 600, 640);
+        //scene.getStylesheets().add(getClass().getResource("/style.css").toExternalForm());
+        scene.getStylesheets().add("/style.css");
+
         stage.setScene(scene);
         stage.setTitle("Tetris-Game");
         stage.show();
