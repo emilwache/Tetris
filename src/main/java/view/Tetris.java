@@ -40,11 +40,15 @@ public class Tetris extends Application {
     //Start-Methode für Tetris-Game
     public void start(Stage stage) throws Exception {
 
+        //Custom Font mit Tetris design
+        Font tetrisFont = Font.loadFont(getClass().getResourceAsStream("/Tetris2-VP0w.ttf"), 112); //112 weil Maximum
+
         //Label name
         lblName = new Label("Name");
-        lblName.setStyle("");
+        //lblName.setStyle("");
         lblName.setId("lblName");
-        lblName.setPrefHeight(50);
+        //lblName.setPrefHeight(50);
+        lblName.setFont(tetrisFont);
 
 
         //Text field für den Namen

@@ -34,9 +34,8 @@
 
 
 
-
 #lblName {
-    -fx-font:44 arial;
+    -fx-text-fill: white;
 }
 
 #textName{
