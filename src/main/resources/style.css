@@ -1,21 +1,44 @@
+
 #smallBox {
     -fx-background: rgba(38,35,35,0.98);
     -fx-effect: dropshadow(three-pass-box, rgba(0, 0, 0, 0.8), 100, 0, 0, 0);
 }
 
 .start-buttons {
+    -fx-padding: 8 15 15 15;
+        -fx-background-insets: 0,0 0 5 0, 0 0 6 0, 0 0 7 0;
+        -fx-background-color:
+                linear-gradient(from 0% 93% to 0% 100%, #8a946c 0%, #8a946c 100%),
+                #000000,
+                #000000,
+                radial-gradient(center 50% 50%, radius 100%, #bcc69a, #bcc69a);
+        -fx-effect: dropshadow( gaussian , rgba(0,0,0,0.75) , 4,0,0,1 );
+        -fx-font-weight: bold;
+        -fx-font-size: 1.3em;
+        -fx-text-fill: white;
+}
+
+.start-buttons:hover {
     -fx-background-color:
-            linear-gradient(#686868 0%, #232723 25%, #373837 75%, #757575 100%),
-            linear-gradient(#020b02, #3a3a3a),
-            linear-gradient(#9d9e9d 0%, #6b6a6b 20%, #343534 80%, #242424 100%),
-            linear-gradient(#8a8a8a 0%, #6b6a6b 20%, #343534 80%, #262626 100%),
-            linear-gradient(#777777 0%, #606060 50%, #505250 51%, #2a2b2a 100%);
-    -fx-background-insets: 0,1,4,5,6;
-    -fx-background-radius: 9,8,5,4,3;
-    -fx-padding: 10 15 10 15;
-    -fx-font-family: "Helvetica";
-    -fx-font-size: 18px;
-    -fx-font-weight: bold;
-    -fx-text-fill: white;
-    -fx-effect: dropshadow( three-pass-box , rgba(255,255,255,0.2) , 1, 0.0 , 0 , 1);
+            linear-gradient(from 0% 93% to 0% 100%, #5a6146 0%, #5a6146 100%),
+            #2a2929,
+            #252424,
+            radial-gradient(center 50% 50%, radius 100%, #8a946c 0%, #8a946c);
+
+}
+
+.start-buttons:pressed {
+    -fx-padding: 10 15 13 15;
+    -fx-background-insets: 2 0 0 0,2 0 3 0, 2 0 4 0, 2 0 5 0;
+}
+
+
+
+
+#lblName {
+    -fx-font:44 arial;
+}
+
+#textName{
+    -fx-font: 24 arial;
 }
