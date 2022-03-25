@@ -11,7 +11,7 @@
                 linear-gradient(from 0% 93% to 0% 100%, #8a946c 0%, #8a946c 100%),
                 #000000,
                 #000000,
-                radial-gradient(center 50% 50%, radius 100%, #bcc69a, #bcc69a);
+                radial-gradient(center 50% 50%, radius 100%, #a9b484, #9fa97d);
         -fx-effect: dropshadow( gaussian , rgba(0,0,0,0.75) , 4,0,0,1 );
         -fx-font-weight: bold;
         -fx-font-size: 1.3em;
@@ -35,9 +35,54 @@
 
 
 #lblName {
-    -fx-text-fill: white;
+    -fx-text-fill: #2a2929;
+    -fx-font-family: "Arial Rounded MT Bold";
+    -fx-font-size: 50;
 }
 
-#textName{
-    -fx-font: 24 arial;
+#txtName {
+    -fx-background-color:
+            linear-gradient(from 0% 93% to 0% 100%, #8a946c 0%, #8a946c 100%),
+            #000000,
+            #000000,
+            radial-gradient(center 50% 50%, radius 100%, #8ca857, #7c964f);
+    -fx-border-width: 5;
+    -fx-border-color: black;
+    -fx-border-radius: 2;
+    -fx-prompt-text-fill: black;
+    -fx-text-fill: black;
+    -fx-font-weight: bold;
+    -fx-font-family: "Eras Bold ITC";
+    -fx-font-size: 25;
+}
+
+#txtName:focused {
+    
+}
+
+#listView {
+    -fx-background-color:
+            linear-gradient(from 0% 93% to 0% 100%, #8a946c 0%, #8a946c 100%),
+            #000000,
+            #000000,
+            radial-gradient(center 50% 50%, radius 100%, #a6c76b, #a6c76b);
+
+    -fx-font-family: "Eras Bold ITC";
+    -fx-border-width: 5;
+    -fx-border-color: black;
+    -fx-border-radius: 2;
+}
+
+.list-cell:even {
+    -fx-background-color: #a9b484;
+    -fx-font-size: 15;
+}
+
+.list-cell:odd {
+    -fx-background-color: #8a946c;
+    -fx-font-size: 15;
+}
+
+#mainbox{
+    -fx-background-color: #8ca857;
 }
