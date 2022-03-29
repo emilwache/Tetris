@@ -1,5 +1,9 @@
+/**
+* @author Thomas Szhukalek, Emil Wache
+* Tetris-Game
+*/
 package view;
-
+//imports
 import javafx.application.Application;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
@@ -8,25 +12,31 @@ import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
+import javafx.scene.control.Button;
+import javafx.scene.control.Label;
+import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
 import javafx.scene.text.Font;
+import javafx.stage.Modality;
 import javafx.stage.Stage;
+import javafx.stage.StageStyle;
 import model.Highscore;
 
-import java.io.FileInputStream;
 
+import java.io.FileInputStream;
+import java.util.Random;
 
 public class Tetris extends Application {
     private Scene       startScene;
-    private Scene       mainScene;
 
     private ObservableList<Highscore> highscore;
 
     private Label       lblName;
     private Font        fontLblName;
     private TextField   txtName;
+    private String      name;
     private Button      btnPlay;
     private Button      btnLevel;
     private ListView    scoreView;
@@ -39,32 +49,39 @@ public class Tetris extends Application {
     private VBox        smallBox;
     private VBox        mainVBox;
     private HBox        box;
-
     private HBox        settingBox;
 
-    private String      name;
+    private FileInputStream tetris_logo;
+
+    //Variablen für Game
+    private Scene mainScene;
+    private static final int SIZE = 25;
+    private static final int XMAX = 11 * SIZE;
+    private static final int YMAX = 23 * SIZE;
+    private static  int[][] FIELD = new int[XMAX / SIZE][YMAX / SIZE];
+    private static Pane group = new Pane();
+    private static int score;
+    private static int lines;
+
+
+
 
     //Start-Methode für Tetris-Game
     public void start(Stage stage) throws Exception {
-
-        //Custom Font mit Tetris design
-
+        //StartSeite
         //Label name
         lblName = new Label("TETRIS");
-
         lblName.setId("lblName");
 
-
-
         //Text field für den Namen
-        txtName = new TextField(); //Text field für den Namen
+        txtName = new TextField();
         txtName.setPadding(new Insets(10,20,10,20));
         txtName.setPromptText("Name eingeben");
         txtName.setId("txtName");
         txtName.setAlignment(Pos.CENTER);
 
         //Button zum Starten des Spiel
-        btnPlay = new Button("PLAY"); //Button zum Starten des Spiel
+        btnPlay = new Button("PLAY");
         btnPlay.setPrefWidth(190);
         btnPlay.setId("playBtn");
         btnPlay.getStyleClass().add("start-buttons");
@@ -78,7 +95,6 @@ public class Tetris extends Application {
         highscore = FXCollections.observableArrayList(
                 new Highscore("Thomas", 300000),
                 new Highscore("Emil", 2)
-
         );
         scoreView = new ListView();
         scoreView.setPrefWidth(225);
@@ -88,11 +104,15 @@ public class Tetris extends Application {
         scoreView.setId("listView");
 
         //Settings-Button image
-        FileInputStream settingFileInputStream = new FileInputStream("src/main/resources/images/settings-img.png");
+        FileInputStream settingFileInputStream =
+        new FileInputStream("src/main/resources/images/settings-img.png");
         Image settingPic = new Image(settingFileInputStream);
         ImageView settingView = new ImageView(settingPic);
         settingView.setFitHeight(50);
         settingView.setFitWidth(50);
+
+        //Icon image
+        tetris_logo = new FileInputStream("src/main/resources/images/tetris_icon.png");
 
         //Settings-Button
         btnSettings = new Button();
@@ -119,7 +139,6 @@ public class Tetris extends Application {
         mainVBox = new VBox(smallBox);
         box = new HBox(mainVBox);
 
-
         //Background-Image
         FileInputStream fi = new FileInputStream("src/main/resources/images/img_12.png");
         Image img = new Image(fi);
@@ -141,23 +160,26 @@ public class Tetris extends Application {
 
 
 
-        //setOnAction
-        btnLevel.setOnAction(event -> click_btnLevel());
-        btnPlay.setOnAction(event -> {
-            if(txtName.getText().length() < 4) {
-                name = txtName.getText();
-            }
-            VBox vbox = new VBox();
-            vbox.setId("mainbox");
-            mainScene = new Scene(vbox, 1024, 768);
-            stage.setScene(mainScene);
+        //MainSeite
 
-        });
+        VBox gameBox = new VBox();
+        mainScene = new Scene(gameBox, 1024, 768);
+        gameBox.setId("mainbox");
+
+        //setOnAction (btnLevel + btnPlay)
+                btnLevel.setOnAction(event -> click_btnLevel());
+                btnPlay.setOnAction(event -> {
+                    if(txtName.getText().length() < 4) {
+                        name = txtName.getText();
+                    }
+                    stage.setScene(mainScene);
+                });
 
         //Scene + Stage
         startScene = new Scene(box, 1024, 768);
         startScene.getStylesheets().add("/style.css");
         stage.setScene(startScene);
+        stage.getIcons().add(new Image(tetris_logo));
         stage.setTitle("Tetris-Game");
         stage.show();
     }
@@ -173,7 +195,6 @@ public class Tetris extends Application {
             btnLevel.setText("Level " + (Integer.parseInt(btnData[1]) + 5));
         }
     }
-
 
     //main
     public static void main(String[] args) {

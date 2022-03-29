@@ -1,9 +1,6 @@
+/* Style.css */
 
-#smallBox {
-    -fx-background: rgba(38,35,35,0.98);
-    -fx-effect: dropshadow(three-pass-box, rgba(0, 0, 0, 0.8), 100, 0, 0, 0);
-}
-
+/*Buttons*/
 .start-buttons {
     -fx-padding: 8 15 15 15;
         -fx-background-insets: 0,0 0 5 0, 0 0 6 0, 0 0 7 0;
@@ -17,29 +14,26 @@
         -fx-font-size: 1.3em;
         -fx-text-fill: white;
 }
-
 .start-buttons:hover {
     -fx-background-color:
             linear-gradient(from 0% 93% to 0% 100%, #5a6146 0%, #5a6146 100%),
             #2a2929,
             #252424,
             radial-gradient(center 50% 50%, radius 100%, #8a946c 0%, #8a946c);
-
 }
-
 .start-buttons:pressed {
     -fx-padding: 10 15 13 15;
     -fx-background-insets: 2 0 0 0,2 0 3 0, 2 0 4 0, 2 0 5 0;
 }
 
-
-
+/*Labels*/
 #lblName {
     -fx-text-fill: #2a2929;
     -fx-font-family: "Arial Rounded MT Bold";
     -fx-font-size: 50;
 }
 
+/*TextFields*/
 #txtName {
     -fx-background-color:
             linear-gradient(from 0% 93% to 0% 100%, #8a946c 0%, #8a946c 100%),
@@ -56,10 +50,7 @@
     -fx-font-size: 25;
 }
 
-#txtName:focused {
-    
-}
-
+/*ListView*/
 #listView {
     -fx-background-color:
             linear-gradient(from 0% 93% to 0% 100%, #8a946c 0%, #8a946c 100%),
@@ -72,17 +63,20 @@
     -fx-border-color: black;
     -fx-border-radius: 2;
 }
-
 .list-cell:even {
     -fx-background-color: #a9b484;
     -fx-font-size: 15;
 }
-
 .list-cell:odd {
     -fx-background-color: #8a946c;
     -fx-font-size: 15;
 }
 
+/*VBox + HBox*/
 #mainbox{
     -fx-background-color: #8ca857;
+}
+#smallBox {
+    -fx-background: rgba(38,35,35,0.98);
+    -fx-effect: dropshadow(three-pass-box, rgba(0, 0, 0, 0.8), 100, 0, 0, 0);
 }
