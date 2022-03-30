@@ -19,18 +19,14 @@ import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
+import javafx.scene.paint.Color;
+import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Font;
-import javafx.stage.Modality;
 import javafx.stage.Stage;
-import javafx.stage.StageStyle;
+import model.Controller;
 import model.Highscore;
-
-
+import model.Forms;
 import java.io.FileInputStream;
-import java.util.Arrays;
-import java.util.Random;
-import java.util.Timer;
-import java.util.TimerTask;
 
 public class Tetris extends Application {
     private Scene       startScene;
@@ -63,7 +59,7 @@ public class Tetris extends Application {
     public static final int XMAX = 11 * SIZE;
     public static final int YMAX = 23 * SIZE;
     public static  int[][] FIELD = new int[XMAX / SIZE][YMAX / SIZE];
-    public static Pane group = new Pane();
+    public static GridPane group = new GridPane();
     public static int score;
     public static int lines;
 
@@ -166,15 +162,25 @@ public class Tetris extends Application {
 
         //MainSeite
 
-
-        group = new Pane();
-        group.setPrefSize(1024, 768);
-
-        for(int[] a : FIELD) {
-            Arrays.fill(FIELD, 0);
-        }
-
-
+        Platform.runLater(new Runnable() {
+            public void run() {
+            Border b = new Border(new BorderStroke(Color.BLACK, BorderStrokeStyle.SOLID, CornerRadii.EMPTY, BorderWidths.DEFAULT));
+            group.setBorder(b);
+            group.setMaxWidth(XMAX);
+            group.setMaxHeight(YMAX);
+                for(int x = 0; x < FIELD.length; x++){
+                    for(int y = 0; y < FIELD[x].length; y++){
+                        Rectangle r = new Rectangle(25, 25);
+                        r.setFill(Color.valueOf("#ffffff"));
+                        group.add(r, x, y);
+                    }
+                }
+            }
+        });
+        VBox.setMargin(group, new Insets(40, 0, 0, 300));
+        VBox vbox = new VBox(group);
+        vbox.setId("mainBox");
+        mainScene = new Scene(vbox, 1024, 768);
 
         //setOnAction (btnLevel + btnPlay)
                 btnLevel.setOnAction(event -> click_btnLevel());
@@ -188,50 +194,12 @@ public class Tetris extends Application {
         //Scene + Stage
         startScene = new Scene(box, 1024, 768);
         startScene.getStylesheets().add("/style.css");
+        mainScene.getStylesheets().add("/style.css");
         stage.setScene(startScene);
         stage.getIcons().add(new Image(tetris_logo));
-        stage.setTitle("Tetris-Game");
+        stage.setTitle("T e t r i s  -  G a m e");
         stage.show();
 
-
-        Timer fall = new Timer();
-        TimerTask task = new TimerTask() {
-            public void run() {
-                Platform.runLater(new Runnable() {
-                    @Override
-                    public void run() {
-                        if (object.a.getY() == 0 || object.b.getY() == 0 || object.c.getY() == 0
-                                || object.d.getY() == 0)
-                            top++;
-                        else
-                            top = 0;
-
-                        if (top == 2) {
-                            // GAME OVER
-                            Text over = new Text("GAME OVER");
-                            over.setFill(Color.RED);
-                            over.setStyle("-fx-font: 70 arial;");
-                            over.setY(250);
-                            over.setX(10);
-                            group.getChildren().add(over);
-                            game = false;
-                        }
-                        // Exit
-                        if (top == 15) {
-                            System.exit(0);
-                        }
-
-                        if (game) {
-                            MoveDown(object);
-                            scoretext.setText("Score: " + Integer.toString(score));
-                            level.setText("Lines: " + Integer.toString(linesNo));
-                        }
-
-                    }
-                });
-
-            }
-        };
     }
 
     //Zum einstellen des Levels bei click auf Button "Level.."

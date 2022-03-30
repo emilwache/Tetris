@@ -73,8 +73,8 @@
 }
 
 /*VBox + HBox*/
-#mainbox{
-    -fx-background-color: #8ca857;
+#mainBox{
+    -fx-background-color: #a9b484;
 }
 #smallBox {
     -fx-background: rgba(38,35,35,0.98);

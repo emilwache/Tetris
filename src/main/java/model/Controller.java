@@ -12,6 +12,9 @@ public class Controller {
     public static final int size = Tetris.SIZE;
     public static int[][] field = Tetris.FIELD;
 
+    public Controller(){
+
+    }
 
     public static Forms makeReact(){
         Random random = new Random();
