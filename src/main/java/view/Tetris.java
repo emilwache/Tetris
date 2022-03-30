@@ -5,6 +5,7 @@
 package view;
 //imports
 import javafx.application.Application;
+import javafx.application.Platform;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -26,7 +27,10 @@ import model.Highscore;
 
 
 import java.io.FileInputStream;
+import java.util.Arrays;
 import java.util.Random;
+import java.util.Timer;
+import java.util.TimerTask;
 
 public class Tetris extends Application {
     private Scene       startScene;
@@ -55,13 +59,13 @@ public class Tetris extends Application {
 
     //Variablen für Game
     private Scene mainScene;
-    private static final int SIZE = 25;
-    private static final int XMAX = 11 * SIZE;
-    private static final int YMAX = 23 * SIZE;
-    private static  int[][] FIELD = new int[XMAX / SIZE][YMAX / SIZE];
-    private static Pane group = new Pane();
-    private static int score;
-    private static int lines;
+    public static final int SIZE = 25;
+    public static final int XMAX = 11 * SIZE;
+    public static final int YMAX = 23 * SIZE;
+    public static  int[][] FIELD = new int[XMAX / SIZE][YMAX / SIZE];
+    public static Pane group = new Pane();
+    public static int score;
+    public static int lines;
 
 
 
@@ -162,9 +166,15 @@ public class Tetris extends Application {
 
         //MainSeite
 
-        VBox gameBox = new VBox();
-        mainScene = new Scene(gameBox, 1024, 768);
-        gameBox.setId("mainbox");
+
+        group = new Pane();
+        group.setPrefSize(1024, 768);
+
+        for(int[] a : FIELD) {
+            Arrays.fill(FIELD, 0);
+        }
+
+
 
         //setOnAction (btnLevel + btnPlay)
                 btnLevel.setOnAction(event -> click_btnLevel());
@@ -182,6 +192,46 @@ public class Tetris extends Application {
         stage.getIcons().add(new Image(tetris_logo));
         stage.setTitle("Tetris-Game");
         stage.show();
+
+
+        Timer fall = new Timer();
+        TimerTask task = new TimerTask() {
+            public void run() {
+                Platform.runLater(new Runnable() {
+                    @Override
+                    public void run() {
+                        if (object.a.getY() == 0 || object.b.getY() == 0 || object.c.getY() == 0
+                                || object.d.getY() == 0)
+                            top++;
+                        else
+                            top = 0;
+
+                        if (top == 2) {
+                            // GAME OVER
+                            Text over = new Text("GAME OVER");
+                            over.setFill(Color.RED);
+                            over.setStyle("-fx-font: 70 arial;");
+                            over.setY(250);
+                            over.setX(10);
+                            group.getChildren().add(over);
+                            game = false;
+                        }
+                        // Exit
+                        if (top == 15) {
+                            System.exit(0);
+                        }
+
+                        if (game) {
+                            MoveDown(object);
+                            scoretext.setText("Score: " + Integer.toString(score));
+                            level.setText("Lines: " + Integer.toString(linesNo));
+                        }
+
+                    }
+                });
+
+            }
+        };
     }
 
     //Zum einstellen des Levels bei click auf Button "Level.."

@@ -49,4 +49,60 @@ public class Forms {
             form = 1;
         }
     }
+
+    public Rectangle getA() {
+        return a;
+    }
+
+    public void setA(Rectangle a) {
+        this.a = a;
+    }
+
+    public Rectangle getB() {
+        return b;
+    }
+
+    public void setB(Rectangle b) {
+        this.b = b;
+    }
+
+    public Rectangle getC() {
+        return c;
+    }
+
+    public void setC(Rectangle c) {
+        this.c = c;
+    }
+
+    public Rectangle getD() {
+        return d;
+    }
+
+    public void setD(Rectangle d) {
+        this.d = d;
+    }
+
+    public Color getColor() {
+        return color;
+    }
+
+    public void setColor(Color color) {
+        this.color = color;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public int getForm() {
+        return form;
+    }
+
+    public void setForm(int form) {
+        this.form = form;
+    }
 }
