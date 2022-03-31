@@ -6,7 +6,6 @@ package view;
 //imports
 import javafx.application.Application;
 import javafx.application.Platform;
-import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.geometry.Insets;
@@ -23,10 +22,14 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Font;
 import javafx.stage.Stage;
-import model.Controller;
+import model.Form;
 import model.Highscore;
-import model.Forms;
+import model.Controller;
+
 import java.io.FileInputStream;
+import java.util.Arrays;
+import java.util.Timer;
+import java.util.TimerTask;
 
 public class Tetris extends Application {
     private Scene       startScene;
@@ -55,19 +58,24 @@ public class Tetris extends Application {
 
     //Variablen für Game
     private Scene mainScene;
+    public static final int MOVE = 25;
     public static final int SIZE = 25;
     public static final int XMAX = 11 * SIZE;
     public static final int YMAX = 23 * SIZE;
     public static  int[][] FIELD = new int[XMAX / SIZE][YMAX / SIZE];
-    public static GridPane group = new GridPane();
+    public static Pane group = new Pane();
     public static int score;
     public static int lines;
+    private static Form nextObj = Controller.makeRect();
 
 
 
 
     //Start-Methode für Tetris-Game
     public void start(Stage stage) throws Exception {
+        for(int[] a : FIELD){
+                        Arrays.fill(a, 0);
+        }
         //StartSeite
         //Label name
         lblName = new Label("TETRIS");
@@ -161,23 +169,31 @@ public class Tetris extends Application {
 
 
         //MainSeite
+        Form a = nextObj;
+        group.getChildren().addAll(a.a, a.b, a.c, a.d);
+        System.out.println(a.toString());
 
-        Platform.runLater(new Runnable() {
-            public void run() {
-            Border b = new Border(new BorderStroke(Color.BLACK, BorderStrokeStyle.SOLID, CornerRadii.EMPTY, BorderWidths.DEFAULT));
-            group.setBorder(b);
-            group.setMaxWidth(XMAX);
-            group.setMaxHeight(YMAX);
-                for(int x = 0; x < FIELD.length; x++){
-                    for(int y = 0; y < FIELD[x].length; y++){
-                        Rectangle r = new Rectangle(25, 25);
-                        r.setFill(Color.valueOf("#ffffff"));
-                        group.add(r, x, y);
-                    }
-                }
-            }
-        });
-        VBox.setMargin(group, new Insets(40, 0, 0, 300));
+        Timer timer = new Timer();
+        TimerTask task = new TimerTask() {
+            public void run(){
+            Platform.runLater(new Runnable() {
+                Platform.runLater(new Runnable() {
+                            public void run() {
+                                Border b = new Border(new BorderStroke(Color.BLACK, BorderStrokeStyle.SOLID, CornerRadii.EMPTY, BorderWidths.DEFAULT));
+                                group.setBorder(b);
+                                group.setPrefHeight(YMAX);
+                                group.setPrefWidth(XMAX);
+                                group.setMaxHeight(YMAX);
+                                group.setMaxWidth(XMAX);
+                            }
+                        }
+            });
+            timer.schedule(task, 0, 300);
+        }
+
+
+
+        VBox.setMargin(group, new Insets(50, 0, 0, 150));
         VBox vbox = new VBox(group);
         vbox.setId("mainBox");
         mainScene = new Scene(vbox, 1024, 768);

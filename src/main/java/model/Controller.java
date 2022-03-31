@@ -16,121 +16,121 @@ public class Controller {
 
     }
 
-    public static Forms makeReact(){
+    public static Form makeRect(){
         Random random = new Random();
         int form = random.nextInt(7) + 1;
-        Rectangle a = new Rectangle(); a.setWidth(25-1); a.setHeight(25-1);
-        Rectangle b = new Rectangle(); b.setWidth(25-1); b.setHeight(25-1);
-        Rectangle c = new Rectangle(); c.setWidth(25-1); c.setHeight(25-1);
-        Rectangle d = new Rectangle(); d.setWidth(25-1); d.setHeight(25-1);
+        Rectangle a = new Rectangle(); a.setWidth(24); a.setHeight(24);
+        Rectangle b = new Rectangle(); b.setWidth(24); b.setHeight(24);
+        Rectangle c = new Rectangle(); c.setWidth(24); c.setHeight(24);
+        Rectangle d = new Rectangle(); d.setWidth(24); d.setHeight(24);
         String name = "";
 
-            switch (form) {
-                case 1: // I-Shape
-                    a.setY(YMAX);
-                    a.setX(XMAX / 2 - 2);
-                    b.setY(YMAX);
-                    b.setX(XMAX / 2 - 1);
-                    c.setY(YMAX);
-                    c.setX(XMAX / 2);
-                    d.setY(YMAX);
-                    d.setX(XMAX / 2 + 1);
-                    name = "i";
-                    break;
-                case 2: // J-Shape
-                    a.setY(YMAX);
-                    a.setX(XMAX / 2);
-                    b.setY(YMAX - 1);
-                    b.setX(XMAX / 2);
-                    c.setY(YMAX - 2);
-                    c.setX(XMAX / 2);
-                    d.setY(YMAX - 2);
-                    d.setX(XMAX / 2 - 1);
-                    name ="j";
-                    break;
-                case 3: //L-Shape
-                    a.setY(YMAX);
-                    a.setX(XMAX / 2);
-                    b.setY(YMAX - 1);
-                    b.setX(XMAX / 2);
-                    c.setY(YMAX - 2);
-                    c.setX(XMAX / 2);
-                    d.setY(YMAX - 2);
-                    d.setX(XMAX / 2 + 1);
-                    name = "l";
-                    break;
-                case 4: // S-Shape
-                    a.setY(YMAX);
-                    a.setX(XMAX / 2);
-                    b.setY(YMAX);
-                    b.setX(XMAX / 2 + 1);
-                    c.setY(YMAX - 2);
-                    c.setX(XMAX / 2);
-                    d.setY(YMAX - 2);
-                    d.setX(XMAX / 2 - 1);
-                    name = "s";
-                    break;
-                case 5:  // Z-Shape
-                    a.setY(YMAX);
-                    a.setX(XMAX / 2);
-                    b.setY(YMAX);
-                    b.setX(XMAX / 2 - 1);
-                    c.setY(YMAX - 2);
-                    c.setX(XMAX / 2);
-                    d.setY(YMAX - 2);
-                    d.setX(XMAX / 2 + 1);
-                    name = "z";
-                    break;
-                case 6: //O-Shape
-                    a.setY(YMAX);
-                    a.setX(XMAX / 2);
-                    b.setY(YMAX);
-                    b.setX(XMAX / 2 + 1);
-                    c.setY(YMAX - 1);
-                    c.setX(XMAX / 2);
-                    d.setY(YMAX - 1);
-                    d.setX(XMAX / 2 + 1);
-                    name = "o";
-                    break;
-                case 7: //T-Shape
-                    a.setY(YMAX);
-                    a.setX(XMAX / 2 - 1);
-                    b.setY(YMAX);
-                    b.setX(XMAX / 2);
-                    c.setY(YMAX);
-                    c.setX(XMAX / 2 + 1);
-                    d.setY(YMAX - 1);
-                    d.setX(XMAX / 2);
-                    name = "t";
-                    break;
-            }
-            return new Forms(a, b, c, d, name);
+        switch (form) {
+            case 1: // I-Shape
+                a.setY(size);
+                a.setX(XMAX / 2 - 2 * size);
+                b.setY(size);
+                b.setX(XMAX / 2 - size);
+                c.setY(size);
+                c.setX(XMAX / 2);
+                d.setY(size);
+                d.setX(XMAX / 2 + size);
+                name = "i";
+                break;
+            case 2 :
+                a.setY(size);
+                a.setX(XMAX / 2 - size);
+                b.setY(2*size);
+                b.setX(XMAX / 2 - size);
+                c.setY(2*size);
+                c.setX(XMAX / 2);
+                d.setY(2*size);
+                d.setX(XMAX / 2 + size);
+                name ="j";
+                break;
+            case 3: //L-Shape
+                a.setY(size);
+                a.setX(XMAX / 2 + size);
+                b.setY(2*size);
+                b.setX(XMAX / 2 - size);
+                c.setY(2*size);
+                c.setX(XMAX / 2);
+                d.setY(2*size);
+                d.setX(XMAX / 2 + size);
+                name = "l";
+                break;
+            case 4: // S-Shape
+                a.setY(size);
+                a.setX(XMAX / 2 +size);
+                b.setY(size);
+                b.setX(XMAX / 2);
+                c.setY(2 * size);
+                c.setX(XMAX / 2);
+                d.setY(2 * size);
+                d.setX(XMAX / 2 - size);
+                name = "s";
+                break;
+            case 5:  // Z-Shape
+                a.setY(size);
+                a.setX(XMAX / 2 -size);
+                b.setY(size);
+                b.setX(XMAX / 2);
+                c.setY(2 * size);
+                c.setX(XMAX / 2);
+                d.setY(2 * size);
+                d.setX(XMAX / 2 - size);
+                name = "z";
+                break;
+            case 6: //O-Shape
+                a.setY(size);
+                a.setX(XMAX / 2 - size);
+                b.setY(size);
+                b.setX(XMAX / 2);
+                c.setY(2 * size);
+                c.setX(XMAX / 2 - size);
+                d.setY(2 * size);
+                d.setX(XMAX / 2);
+                name = "o";
+                break;
+            case 7: //T-Shape
+                a.setY(size);
+                a.setX(XMAX / 2);
+                b.setY(2 * size);
+                b.setX(XMAX / 2 - size);
+                c.setY(2 * size);
+                c.setX(XMAX / 2);
+                d.setY(2 * size);
+                d.setX(XMAX / 2 + size);
+                name = "t";
+                break;
         }
-        public static Forms moveRight(Forms form){
-
-            return null;
-        }
-
-        public static Forms moveLeft(Forms form){
-
-            return null;
-        }
-
-        public static void moveDown(Forms form){
-            int moveA = (int) (form.getA().getY() - 1);
-            int moveB = (int) (form.getB().getY() - 1);
-            int moveC = (int) (form.getC().getY() - 1);
-            int moveD = (int) (form.getD().getY() - 1);
-            form.getA().setY(moveA);
-            form.getB().setY(moveB);
-            form.getC().setY(moveC);
-            form.getD().setY(moveD);
-        }
-
-        public static Forms moveUp(Forms form){
-
-            return null;
-        }
-
-
+        return new Form(a, b, c, d, name);
     }
+    public static Form moveRight(Form form){
+
+        return null;
+    }
+
+    public static Form moveLeft(Form form){
+
+        return null;
+    }
+
+    public static void moveDown(Form form){
+        int moveA = (int) (form.a.getY() - 1);
+        int moveB = (int) (form.b.getY() - 1);
+        int moveC = (int) (form.c.getY() - 1);
+        int moveD = (int) (form.d.getY() - 1);
+        form.a.setY(moveA);
+        form.b.setY(moveB);
+        form.c.setY(moveC);
+        form.d.setY(moveD);
+    }
+
+    public static Form moveUp(Form form){
+
+        return null;
+    }
+
+
+}

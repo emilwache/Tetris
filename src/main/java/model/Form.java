@@ -1,20 +1,26 @@
 package model;
-//Klasse Forms
-
+//Klasse Form
 
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 
-public class Forms {
-    private Rectangle a;
-    private Rectangle b;
-    private Rectangle c;
-    private Rectangle d;
-    private Color color;
-    private String name;
-    private int form = 1;
+public class Form {
+    public Rectangle a;
+    public Rectangle b;
+    public Rectangle c;
+    public Rectangle d;
+    public Color color;
+    public String name;
+    public int form = 1;
 
-    public Forms(Rectangle a, Rectangle b, Rectangle c, Rectangle d, String name) {
+    public Form(Rectangle a, Rectangle b, Rectangle c, Rectangle d) {
+        this.a = a;
+        this.b = b;
+        this.c = c;
+        this.d = d;
+    }
+
+    public Form(Rectangle a, Rectangle b, Rectangle c, Rectangle d, String name) {
         this.a = a;
         this.b = b;
         this.c = c;
@@ -41,7 +47,12 @@ public class Forms {
             case "t":
                 color = Color.MAGENTA;
         }
+        this.a.setFill(color);
+        this.b.setFill(color);
+        this.c.setFill(color);
+        this.d.setFill(color);
     }
+    //Um zu wissen, wie man die Form rotieren muss
     public void changeForm() {
         if (form != 4) {
             form++;
@@ -98,11 +109,16 @@ public class Forms {
         this.name = name;
     }
 
-    public int getForm() {
-        return form;
-    }
-
-    public void setForm(int form) {
-        this.form = form;
+    @Override
+    public String toString() {
+        return "Form{" +
+                "a=" + a +
+                ", b=" + b +
+                ", c=" + c +
+                ", d=" + d +
+                ", color=" + color +
+                ", name='" + name + '\'' +
+                ", form=" + form +
+                '}';
     }
 }
