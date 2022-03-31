@@ -12,6 +12,7 @@ public class Controller {
     public static final int size = Tetris.SIZE;
     public static int[][] field = Tetris.FIELD;
 
+
     public Controller(){
 
     }
@@ -117,14 +118,29 @@ public class Controller {
     }
 
     public static void moveDown(Form form){
-        int moveA = (int) (form.a.getY() - 1);
-        int moveB = (int) (form.b.getY() - 1);
-        int moveC = (int) (form.c.getY() - 1);
-        int moveD = (int) (form.d.getY() - 1);
-        form.a.setY(moveA);
-        form.b.setY(moveB);
-        form.c.setY(moveC);
-        form.d.setY(moveD);
+        int moveA = (int) (form.a.getY() + size);
+        int moveB = (int) (form.b.getY() + size);
+        int moveC = (int) (form.c.getY() + size);
+        int moveD = (int) (form.d.getY() + size);
+        if(moveA + size < YMAX || moveB + size < YMAX || moveC + size < YMAX || moveD + size < YMAX) {
+                form.a.setY(moveA);
+                form.b.setY(moveB);
+                form.c.setY(moveC);
+                form.d.setY(moveD);
+        }
+
+        else {
+            field[(int) (form.a.getX()/size)][(int) (form.a.getY()/size)] = 1;
+            field[(int) (form.b.getX()/size)][(int) (form.b.getY()/size)] = 1;
+            field[(int) (form.c.getX()/size)][(int) (form.c.getY()/size)] = 1;
+            field[(int) (form.d.getX()/size)][(int) (form.d.getY()/size)] = 1;
+            Form a = Tetris.nextObj;
+            Tetris.nextObj = makeRect();
+            Tetris.object = a;
+            Tetris.group.getChildren().addAll(a.a, a.b, a.c, a.d);
+        }
+
+
     }
 
     public static Form moveUp(Form form){

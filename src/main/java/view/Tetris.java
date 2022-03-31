@@ -8,6 +8,7 @@ import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.concurrent.Task;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
@@ -30,29 +31,30 @@ import java.io.FileInputStream;
 import java.util.Arrays;
 import java.util.Timer;
 import java.util.TimerTask;
+import java.util.concurrent.TimeUnit;
 
 public class Tetris extends Application {
-    private Scene       startScene;
+    private Scene startScene;
 
     private ObservableList<Highscore> highscore;
 
-    private Label       lblName;
-    private Font        fontLblName;
-    private TextField   txtName;
-    private String      name;
-    private Button      btnPlay;
-    private Button      btnLevel;
-    private ListView    scoreView;
-    private Button      btnSettings;
+    private Label lblName;
+    private Font fontLblName;
+    private TextField txtName;
+    private String name;
+    private Button btnPlay;
+    private Button btnLevel;
+    private ListView scoreView;
+    private Button btnSettings;
 
-    private VBox        nameBox;
-    private VBox        playBox;
-    private VBox        lvlBox;
-    private VBox        scoreBox;
-    private VBox        smallBox;
-    private VBox        mainVBox;
-    private HBox        box;
-    private HBox        settingBox;
+    private VBox nameBox;
+    private VBox playBox;
+    private VBox lvlBox;
+    private VBox scoreBox;
+    private VBox smallBox;
+    private VBox mainVBox;
+    private HBox box;
+    private HBox settingBox;
 
     private FileInputStream tetris_logo;
 
@@ -62,19 +64,21 @@ public class Tetris extends Application {
     public static final int SIZE = 25;
     public static final int XMAX = 11 * SIZE;
     public static final int YMAX = 23 * SIZE;
-    public static  int[][] FIELD = new int[XMAX / SIZE][YMAX / SIZE];
+    public static int[][] FIELD = new int[XMAX / SIZE][YMAX / SIZE];
     public static Pane group = new Pane();
     public static int score;
     public static int lines;
-    private static Form nextObj = Controller.makeRect();
-
-
+    public static Form nextObj = Controller.makeRect();
+    public static Form object;
+    private static boolean game = true;
+    private boolean mainpage = false;
+    private boolean delay = false;
 
 
     //Start-Methode für Tetris-Game
     public void start(Stage stage) throws Exception {
-        for(int[] a : FIELD){
-                        Arrays.fill(a, 0);
+        for (int[] a : FIELD) {
+            Arrays.fill(a, 0);
         }
         //StartSeite
         //Label name
@@ -83,7 +87,7 @@ public class Tetris extends Application {
 
         //Text field für den Namen
         txtName = new TextField();
-        txtName.setPadding(new Insets(10,20,10,20));
+        txtName.setPadding(new Insets(10, 20, 10, 20));
         txtName.setPromptText("Name eingeben");
         txtName.setId("txtName");
         txtName.setAlignment(Pos.CENTER);
@@ -113,7 +117,7 @@ public class Tetris extends Application {
 
         //Settings-Button image
         FileInputStream settingFileInputStream =
-        new FileInputStream("src/main/resources/images/settings-img.png");
+                new FileInputStream("src/main/resources/images/settings-img.png");
         Image settingPic = new Image(settingFileInputStream);
         ImageView settingView = new ImageView(settingPic);
         settingView.setFitHeight(50);
@@ -150,8 +154,8 @@ public class Tetris extends Application {
         //Background-Image
         FileInputStream fi = new FileInputStream("src/main/resources/images/img_12.png");
         Image img = new Image(fi);
-        BackgroundImage bImg = new BackgroundImage(img, BackgroundRepeat.NO_REPEAT,BackgroundRepeat.NO_REPEAT,
-                                                        BackgroundPosition.DEFAULT, BackgroundSize.DEFAULT);
+        BackgroundImage bImg = new BackgroundImage(img, BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT,
+                BackgroundPosition.DEFAULT, BackgroundSize.DEFAULT);
         Background background = new Background(bImg);
         box.setBackground(background);
 
@@ -164,32 +168,54 @@ public class Tetris extends Application {
         box.setAlignment(Pos.CENTER);
 
         VBox.setMargin(playBox, new Insets(10));
-        VBox.setMargin(scoreBox, new Insets(10,0,0,0));
-
+        VBox.setMargin(scoreBox, new Insets(10, 0, 0, 0));
 
 
         //MainSeite
         Form a = nextObj;
         group.getChildren().addAll(a.a, a.b, a.c, a.d);
+        object = a;
+        nextObj = Controller.makeRect();
         System.out.println(a.toString());
+        Border b = new Border(new BorderStroke(Color.BLACK, BorderStrokeStyle.SOLID, CornerRadii.EMPTY, BorderWidths.DEFAULT));
+        group.setBorder(b);
+        group.setPrefHeight(YMAX);
+        group.setPrefWidth(XMAX);
+        group.setMaxHeight(YMAX);
+        group.setMaxWidth(XMAX);
 
         Timer timer = new Timer();
         TimerTask task = new TimerTask() {
-            public void run(){
-            Platform.runLater(new Runnable() {
+            public void run() {
+                if(!delay)
+                {
+                    try {
+                        TimeUnit.SECONDS.sleep(3);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                    delay = true;
+                }
+
                 Platform.runLater(new Runnable() {
-                            public void run() {
-                                Border b = new Border(new BorderStroke(Color.BLACK, BorderStrokeStyle.SOLID, CornerRadii.EMPTY, BorderWidths.DEFAULT));
-                                group.setBorder(b);
-                                group.setPrefHeight(YMAX);
-                                group.setPrefWidth(XMAX);
-                                group.setMaxHeight(YMAX);
-                                group.setMaxWidth(XMAX);
-                            }
+                    @Override
+                    public void run() {
+                        if (game && mainpage) {
+                            Controller.moveDown(object);
+
                         }
-            });
-            timer.schedule(task, 0, 300);
-        }
+
+                    }
+                });
+
+            }
+
+        };
+        timer.schedule(task, 0, 300);
+
+
+
+
 
 
 
@@ -201,6 +227,8 @@ public class Tetris extends Application {
         //setOnAction (btnLevel + btnPlay)
                 btnLevel.setOnAction(event -> click_btnLevel());
                 btnPlay.setOnAction(event -> {
+
+                    mainpage = true;
                     if(txtName.getText().length() < 4) {
                         name = txtName.getText();
                     }
@@ -216,6 +244,13 @@ public class Tetris extends Application {
         stage.setTitle("T e t r i s  -  G a m e");
         stage.show();
 
+    }
+
+
+    public void MoveDown(Rectangle rect) {
+        if(rect.getY() + MOVE < YMAX) {
+            rect.setY(rect.getY() + MOVE);
+        }
     }
 
     //Zum einstellen des Levels bei click auf Button "Level.."
