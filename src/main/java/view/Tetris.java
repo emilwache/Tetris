@@ -9,6 +9,7 @@ import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.concurrent.Task;
+import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
@@ -18,6 +19,7 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
@@ -26,7 +28,6 @@ import javafx.stage.Stage;
 import model.Form;
 import model.Highscore;
 import model.Controller;
-
 import java.io.FileInputStream;
 import java.util.Arrays;
 import java.util.Timer;
@@ -62,7 +63,7 @@ public class Tetris extends Application {
     private Scene mainScene;
     public static final int MOVE = 25;
     public static final int SIZE = 25;
-    public static final int XMAX = 11 * SIZE;
+    public static final int XMAX = 12 * SIZE;
     public static final int YMAX = 23 * SIZE;
     public static int[][] FIELD = new int[XMAX / SIZE][YMAX / SIZE];
     public static Pane group = new Pane();
@@ -74,12 +75,9 @@ public class Tetris extends Application {
     private boolean mainpage = false;
     private boolean delay = false;
 
-
     //Start-Methode für Tetris-Game
     public void start(Stage stage) throws Exception {
-        for (int[] a : FIELD) {
-            Arrays.fill(a, 0);
-        }
+
         //StartSeite
         //Label name
         lblName = new Label("TETRIS");
@@ -166,12 +164,14 @@ public class Tetris extends Application {
         scoreBox.setAlignment(Pos.CENTER);
         settingBox.setAlignment(Pos.CENTER);
         box.setAlignment(Pos.CENTER);
-
         VBox.setMargin(playBox, new Insets(10));
         VBox.setMargin(scoreBox, new Insets(10, 0, 0, 0));
 
 
         //MainSeite
+         for (int[] a : FIELD) {
+             Arrays.fill(a, 0);
+         }
         Form a = nextObj;
         group.getChildren().addAll(a.a, a.b, a.c, a.d);
         object = a;
@@ -202,7 +202,7 @@ public class Tetris extends Application {
                     public void run() {
                         if (game && mainpage) {
                             Controller.moveDown(object);
-
+                            moveOnKeyPress(object);
                         }
 
                     }
@@ -212,12 +212,6 @@ public class Tetris extends Application {
 
         };
         timer.schedule(task, 0, 300);
-
-
-
-
-
-
 
         VBox.setMargin(group, new Insets(50, 0, 0, 150));
         VBox vbox = new VBox(group);
@@ -252,6 +246,34 @@ public class Tetris extends Application {
             rect.setY(rect.getY() + MOVE);
         }
     }
+
+     private void moveOnKeyPress(Form form) {
+            mainScene.setOnKeyPressed(new EventHandler<KeyEvent>() {
+                public void handle(KeyEvent event) {
+                    switch (event.getCode()) {
+                        case RIGHT:
+                            Controller.moveRight(form);
+                            break;
+                        case DOWN:
+                            Controller.moveDownOnKeyPress(form);
+                            score++;
+                            break;
+                        case LEFT:
+                            Controller.moveLeft(form);
+                            break;
+                        case A:
+                            Controller.moveLeft(form);
+                            break;
+                        case D:
+                            Controller.moveRight(form);
+                            break;
+                        case UP:
+                            Controller.turn(form);
+                            break;
+                    }
+                }
+            });
+        }
 
     //Zum einstellen des Levels bei click auf Button "Level.."
     public void click_btnLevel(){

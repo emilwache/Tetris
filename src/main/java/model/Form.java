@@ -109,6 +109,10 @@ public class Form {
         this.name = name;
     }
 
+    public void setForm(int form){
+        this.form = form;
+    }
+
     @Override
     public String toString() {
         return "Form{" +
