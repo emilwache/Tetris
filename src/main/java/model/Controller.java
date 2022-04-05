@@ -18,7 +18,8 @@ public class Controller {
 
     public static Form makeRect() {
         Random random = new Random();
-        int form = random.nextInt(7) + 1;
+        //int form = random.nextInt(7) + 1;
+        int form = 1;
         Rectangle a = new Rectangle();
         a.setWidth(24);
         a.setHeight(24);
@@ -223,51 +224,23 @@ public class Controller {
                     rectMoveUp(form.d);
                     rectMoveUp(form.d);
                     rectMoveUp(form.d);
+                    moveRight(form);
                     form.setForm(2);
                     break;
                 } if(form.form == 2) {
-                    rectMoveLeft(form.b);
                     rectMoveDown(form.b);
-                    rectMoveLeft(form.c);
-                    rectMoveLeft(form.c);
-                    rectMoveDown(form.c);
-                    rectMoveDown(form.c);
-                    rectMoveLeft(form.d);
-                    rectMoveLeft(form.d);
-                    rectMoveLeft(form.d);
-                    rectMoveDown(form.d);
-                    rectMoveDown(form.d);
-                    rectMoveDown(form.d);
-                    form.setForm(3);
-                    break;
-            } if(form.form == 3){
-                    rectMoveUp(form.c);
-                    rectMoveLeft(form.c);
-                    rectMoveLeft(form.b);
-                    rectMoveLeft(form.b);
-                    rectMoveUp(form.b);
-                    rectMoveUp(form.b);
-                    rectMoveLeft(form.a);
-                    rectMoveLeft(form.a);
-                    rectMoveLeft(form.a);
-                    rectMoveUp(form.a);
-                    rectMoveUp(form.a);
-                    rectMoveUp(form.a);
-                    form.setForm(4);
-                    break;
-            } if(form.form == 4){
-                    rectMoveUp(form.b);
                     rectMoveRight(form.b);
-                    rectMoveUp(form.c);
-                    rectMoveUp(form.c);
                     rectMoveRight(form.c);
                     rectMoveRight(form.c);
-                    rectMoveUp(form.d);
-                    rectMoveUp(form.d);
-                    rectMoveUp(form.d);
+                    rectMoveDown(form.c);
+                    rectMoveDown(form.c);
                     rectMoveRight(form.d);
                     rectMoveRight(form.d);
                     rectMoveRight(form.d);
+                    rectMoveDown(form.d);
+                    rectMoveDown(form.d);
+                    rectMoveDown(form.d);
+                    moveLeft(form);
                     form.setForm(1);
                     break;
             }
