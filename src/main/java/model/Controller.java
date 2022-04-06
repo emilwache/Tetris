@@ -205,6 +205,10 @@ public class Controller {
                 moveDownOnKeyPress(form);
             }
         }
+        Form a = Tetris.nextObj;
+        Tetris.nextObj = Controller.makeRect();
+        Tetris.object = a;
+        Tetris.group.getChildren().addAll(a.a, a.b, a.c, a.d);
 
     }
 
