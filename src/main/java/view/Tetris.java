@@ -211,7 +211,7 @@ public class Tetris extends Application {
             }
 
         };
-        timer.schedule(task, 0, 300);
+        timer.schedule(task, 0, 600);
 
         VBox.setMargin(group, new Insets(50, 0, 0, 150));
         VBox vbox = new VBox(group);
@@ -269,6 +269,9 @@ public class Tetris extends Application {
                             break;
                         case UP:
                             Controller.turn(form);
+                            break;
+                        case SPACE:
+                            Controller.fallOnKeyPress(form);
                             break;
                     }
                 }
