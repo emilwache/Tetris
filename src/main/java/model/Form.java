@@ -28,38 +28,41 @@ public class Form {
         this.name = name;
         switch (name) {
             case "i":
-                color = Color.BLUE;
+                color = Color.valueOf("#547a1d");
                 break;
             case "j":
-                color = Color.RED;
+                color = Color.valueOf("#3b5c0a");
                 break;
             case "l":
-                color = Color.GREEN;
+                color = Color.valueOf("#101c05");
+                break;
             case "s":
-                color = Color.YELLOW;
+                color = Color.valueOf("#19260d");
                 break;
             case "z":
-                color = Color.PINK;
+                color = Color.valueOf("#314c1a");
                 break;
             case "o":
-                color = Color.CYAN;
+                color = Color.valueOf("#4a7326");
                 break;
             case "t":
-                color = Color.MAGENTA;
+                color = Color.valueOf("#629b31");
+                break;
         }
         this.a.setFill(color);
+        a.setStroke(Color.BLACK);
+        a.setStrokeWidth(1);
         this.b.setFill(color);
+        b.setStroke(Color.BLACK);
+        b.setStrokeWidth(1);
         this.c.setFill(color);
+        c.setStroke(Color.BLACK);
+        c.setStrokeWidth(1);
         this.d.setFill(color);
+        d.setStroke(Color.BLACK);
+        d.setStrokeWidth(1);
     }
     //Um zu wissen, wie man die Form rotieren muss
-    public void changeForm() {
-        if (form != 4) {
-            form++;
-        } else {
-            form = 1;
-        }
-    }
 
     public Rectangle getA() {
         return a;

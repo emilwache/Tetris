@@ -206,11 +206,10 @@ public class Tetris extends Application {
 
                     }
                 });
-
             }
 
         };
-        timer.schedule(task, 0, 1000);
+        timer.schedule(task, 0, 300);
 
         VBox.setMargin(group, new Insets(50, 0, 0, 150));
         VBox vbox = new VBox(group);
