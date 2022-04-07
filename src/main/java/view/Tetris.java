@@ -176,7 +176,6 @@ public class Tetris extends Application {
         group.getChildren().addAll(a.a, a.b, a.c, a.d);
         object = a;
         nextObj = Controller.makeRect();
-        System.out.println(a.toString());
         Border b = new Border(new BorderStroke(Color.BLACK, BorderStrokeStyle.SOLID, CornerRadii.EMPTY, BorderWidths.DEFAULT));
         group.setBorder(b);
         group.setPrefHeight(YMAX);
@@ -211,7 +210,7 @@ public class Tetris extends Application {
             }
 
         };
-        timer.schedule(task, 0, 600);
+        timer.schedule(task, 0, 1000);
 
         VBox.setMargin(group, new Insets(50, 0, 0, 150));
         VBox vbox = new VBox(group);

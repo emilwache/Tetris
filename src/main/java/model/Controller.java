@@ -20,10 +20,11 @@ public class Controller {
 
     public static Form makeRect() {
         Random random = new Random();
-        int form = random.nextInt(7) + 1;
-        if(randomNum == form) {
-            form = random.nextInt(7) + 1;
-        }
+        //int form = random.nextInt(7) + 1;
+        int form = 1;
+       //if(randomNum == form) {
+          // form = random.nextInt(7) + 1;
+        //}
         randomNum = form;
         Rectangle a = new Rectangle();
         a.setWidth(24);
@@ -239,74 +240,280 @@ public class Controller {
     public static void turn(Form form) {
         switch(form.getName()){
             case "i": //I-Shape
-                if(form.form == 1 && form.c.getY() > 2*size) {
+                if(form.form == 1 && form.a.getY() - size > 0) {
+                    System.out.println(form.form);
+                    rectMoveUp(form.c);
+                    rectMoveLeft(form.d);
+                    rectMoveUp(form.b);
                     rectMoveUp(form.b);
                     rectMoveRight(form.b);
                     rectMoveUp(form.a);
                     rectMoveUp(form.a);
+                    rectMoveUp(form.a);
                     rectMoveRight(form.a);
                     rectMoveRight(form.a);
-                    rectMoveUp(form.d);
-                    rectMoveUp(form.d);
-                    rectMoveUp(form.d);
-                    rectMoveLeft(form.d);
                     form.setForm(2);
-                    break;
-                } if(form.form == 2) {
-                    if(form.c.getX() + 2*size <= XMAX && form.c.getX() - 2*size >= 0) {
-                        rectMoveDown(form.b);
-                        rectMoveLeft(form.b);
-                        rectMoveDown(form.a);
-                        rectMoveDown(form.a);
-                        rectMoveLeft(form.a);
-                        rectMoveLeft(form.a);
-                        rectMoveDown(form.d);
-                        rectMoveDown(form.d);
-                        rectMoveDown(form.d);
-                        rectMoveRight(form.d);
-                        form.setForm(3);
-                        break;
-                    }
-            } if(form.form == 3) {
-                rectMoveUp(form.b);
-                rectMoveRight(form.b);
-                rectMoveUp(form.a);
-                rectMoveUp(form.a);
-                rectMoveRight(form.a);
-                rectMoveRight(form.a);
-                rectMoveUp(form.d);
-                rectMoveUp(form.d);
-                rectMoveUp(form.d);
-                rectMoveLeft(form.d);
-                moveLeft(form);
-                form.setForm(4);
-                break;
-            } if(form.form == 4) {
-                    if(form.c.getX() + 2*size <= XMAX && form.c.getX() - 2*size >= 0) {
-                        rectMoveDown(form.b);
-                        rectMoveLeft(form.b);
-                        rectMoveDown(form.a);
-                        rectMoveDown(form.a);
-                        rectMoveLeft(form.a);
-                        rectMoveLeft(form.a);
-                        rectMoveDown(form.d);
-                        rectMoveDown(form.d);
-                        rectMoveDown(form.d);
-                        rectMoveRight(form.d);
-                        moveRight(form);
-                        form.setForm(1);
-                        break;
-                    }
-            } if(form.c.getX() + 2 * size >= XMAX || form.a.getX() + 2 * size >= XMAX || form.b.getX() + 2* size >= XMAX || form.d.getX() + 2* size >= XMAX){
-                    moveLeft(form);
-                    turn(form);
-            } else if (form.c.getX() - size <= 0){
-                    moveRight(form);
-                    turn(form);
-            } else if (form.c.getY() <= 2*size){
+                } else if(form.form == 2) {
+                    rectMoveLeft(form.a);
+                    rectMoveLeft(form.a);
+                    rectMoveDown(form.a);
+                    rectMoveDown(form.a);
+                    rectMoveDown(form.a);
+                    rectMoveLeft(form.b);
+                    rectMoveDown(form.b);
+                    rectMoveDown(form.b);
+                    rectMoveRight(form.d);
+                    rectMoveDown(form.c);
+                    form.setForm(3);
+                } else if(form.form == 3) {
+                    rectMoveUp(form.a);
+                    rectMoveUp(form.a);
+                    rectMoveUp(form.a);
+                    rectMoveRight(form.a);
+                    rectMoveUp(form.b);
+                    rectMoveUp(form.b);
+                    rectMoveUp(form.c);
+                    rectMoveLeft(form.c);
+                    rectMoveLeft(form.d);
+                    rectMoveLeft(form.d);
+                    form.setForm(4);
+                } else if(form.form == 4) {
+                    rectMoveRight(form.d);
+                    rectMoveRight(form.d);
+                    rectMoveRight(form.c);
+                    rectMoveDown(form.c);
+                    rectMoveDown(form.b);
+                    rectMoveDown(form.b);
+                    rectMoveLeft(form.a);
+                    rectMoveDown(form.a);
+                    rectMoveDown(form.a);
+                    rectMoveDown(form.a);
+                    form.setForm(1);
+                } else if(form.form == 1 && form.a.getY() - size <= 0){
+                    moveDown(form);
+                    moveDown(form);
                     moveDown(form);
                     turn(form);
-            }
+                }
+                break;
+            case "j":
+                if(form.form == 1){
+                     rectMoveUp(form.a);
+                     rectMoveRight(form.a);
+                     rectMoveRight(form.a);
+                     rectMoveUp(form.b);
+                     rectMoveUp(form.b);
+                     rectMoveRight(form.b);
+                     rectMoveUp(form.c);
+                     rectMoveLeft(form.d);
+                    form.setForm(2);
+                } else if(form.form == 2 && form.b.getX() - size > 0 && form.a.getX() - 2*size >0){
+                    rectMoveDown(form.a);
+                    rectMoveDown(form.a);
+                    rectMoveRight(form.b);
+                    rectMoveDown(form.b);
+                    rectMoveLeft(form.d);
+                    rectMoveUp(form.d);
+                    form.setForm(3);
+                } else if(form.form == 3){
+                    rectMoveLeft(form.a);
+                    rectMoveDown(form.b);
+                    rectMoveRight(form.c);
+                    rectMoveUp(form.d);
+                    rectMoveRight(form.d);
+                    rectMoveRight(form.d);
+                    form.setForm(4);
+                } else if(form.form == 4 && form.a.getX() - size > 0 && form.b.getX() - 2*size >0){
+                    rectMoveUp(form.a);
+                    rectMoveLeft(form.a);
+                    rectMoveLeft(form.b);
+                    rectMoveLeft(form.b);
+                    rectMoveLeft(form.c);
+                    rectMoveDown(form.c);
+                    rectMoveDown(form.d);
+                    rectMoveDown(form.d);
+                    form.setForm(1);
+                } else if(form.form == 2 && form.b.getX() - size <= 0 && form.a.getX() - 2*size <= 0){
+                    rectMoveRight(form.a);
+                    rectMoveDown(form.a);
+                    rectMoveDown(form.a);
+                    rectMoveRight(form.b);
+                    rectMoveRight(form.b);
+                    rectMoveDown(form.b);
+                    rectMoveRight(form.c);
+                    rectMoveUp(form.d);
+                    form.setForm(3);
+                } else if(form.form == 4 && form.a.getX() - size <= 0 && form.b.getX() - 2*size <= 0){
+                    rectMoveUp(form.a);
+                    rectMoveLeft(form.b);
+                    rectMoveDown(form.c);
+                    rectMoveRight(form.d);
+                    rectMoveDown(form.d);
+                    rectMoveDown(form.d);
+                    form.setForm(1);
+                }
+                break;
+            case "l":
+                if(form.form == 1){
+                    rectMoveUp(form.b);
+                    rectMoveUp(form.b);
+                    rectMoveRight(form.b);
+                    rectMoveUp(form.c);
+                    rectMoveLeft(form.d);
+                    rectMoveDown(form.a);
+                    form.setForm(2);
+                } else if(form.form == 2 && form.a.getX() - size > 0 && form.a.getX() - 2*size >0){
+                    rectMoveLeft(form.d);
+                    rectMoveUp(form.d);
+                    rectMoveRight(form.b);
+                    rectMoveDown(form.b);
+                    rectMoveLeft(form.a);
+                    rectMoveLeft(form.a);
+                    form.setForm(3);
+                } else if(form.form == 3){
+                    rectMoveUp(form.d);
+                    rectMoveRight(form.d);
+                    rectMoveDown(form.b);
+                    rectMoveLeft(form.b);
+                    rectMoveUp(form.a);
+                    rectMoveUp(form.a);
+                    form.setForm(4);
+                } else if(form.form == 4 && form.a.getX() + 2*size < XMAX && form.d.getX() + size < XMAX){
+                    rectMoveLeft(form.b);
+                    rectMoveDown(form.c);
+                    rectMoveRight(form.d);
+                    rectMoveDown(form.d);
+                    rectMoveDown(form.d);
+                    rectMoveRight(form.a);
+                    rectMoveRight(form.a);
+                    rectMoveDown(form.a);
+                    form.setForm(1);
+                } else if(form.form == 2 && form.d.getX() - size <= 0 && form.a.getX() - 2*size <= 0){
+                    rectMoveRight(form.b);
+                    rectMoveRight(form.b);
+                    rectMoveDown(form.b);
+                    rectMoveRight(form.c);
+                    rectMoveUp(form.d);
+                    rectMoveLeft(form.a);
+                    form.setForm(3);
+                } else if(form.form == 4 && form.a.getX() + 2*size >= XMAX && form.d.getX() + size >= XMAX){
+                    rectMoveLeft(form.b);
+                    rectMoveLeft(form.b);
+                    rectMoveLeft(form.c);
+                    rectMoveDown(form.c);
+                    rectMoveDown(form.d);
+                    rectMoveDown(form.d);
+                    rectMoveRight(form.a);
+                    rectMoveDown(form.a);
+                    form.setForm(1);
+                }
+
+                break;
+            case "s":
+                    if(form.form == 1){
+                        rectMoveUp(form.a);
+                        rectMoveLeft(form.a);
+                        rectMoveRight(form.c);
+                        rectMoveUp(form.c);
+                        rectMoveRight(form.d);
+                        rectMoveRight(form.d);
+                        form.setForm(2);
+                    } else if(form.form == 2 && form.a.getX() - size > 0){
+                        rectMoveLeft(form.d);
+                        rectMoveLeft(form.d);
+                        rectMoveDown(form.c);
+                        rectMoveLeft(form.c);
+                        rectMoveDown(form.a);
+                        rectMoveRight(form.a);
+                        form.setForm(1);
+                    } else if(form.form == 2 && form.a.getX() - size <= 0){
+                        rectMoveLeft(form.d);
+                        rectMoveDown(form.c);
+                        rectMoveRight(form.b);
+                        rectMoveRight(form.a);
+                        rectMoveRight(form.a);
+                        rectMoveDown(form.a);
+                        form.setForm(1);
+                    }
+                break;
+            case "z":
+                    if(form.form == 1){
+                        rectMoveUp(form.a);
+                        rectMoveRight(form.a);
+                        rectMoveRight(form.a);
+                        rectMoveRight(form.b);
+                        rectMoveUp(form.c);
+                        rectMoveLeft(form.d);
+                        form.setForm(2);
+                    } else if(form.form == 2 && form.a.getX() - 2*size > 0){
+                        rectMoveRight(form.d);
+                        rectMoveDown(form.c);
+                        rectMoveLeft(form.b);
+                        rectMoveLeft(form.a);
+                        rectMoveLeft(form.a);
+                        rectMoveDown(form.a);
+                        form.setForm(1);
+                    } else if(form.form == 2 && form.a.getX() - 2*size <= 0){
+                        rectMoveRight(form.d);
+                        rectMoveRight(form.d);
+                        rectMoveDown(form.c);
+                        rectMoveRight(form.c);
+                        rectMoveLeft(form.a);
+                        rectMoveDown(form.a);
+                        form.setForm(1);
+                    }
+                break;
+            case "t":
+                    if(form.form == 1){
+                        rectMoveRight(form.a);
+                        rectMoveUp(form.b);
+                        rectMoveUp(form.b);
+                        rectMoveRight(form.b);
+                        rectMoveUp(form.c);
+                        rectMoveLeft(form.d);
+                        form.setForm(2);
+                    } else if(form.form == 2 && form.c.getX() - size > 0){
+                        rectMoveLeft(form.d);
+                        rectMoveUp(form.d);
+                        rectMoveDown(form.a);
+                        rectMoveLeft(form.a);
+                        rectMoveRight(form.b);
+                        rectMoveDown(form.b);
+                        form.setForm(3);
+                    } else if(form.form == 3){
+                        rectMoveUp(form.d);
+                        rectMoveRight(form.d);
+                        rectMoveLeft(form.a);
+                        rectMoveUp(form.a);
+                        rectMoveDown(form.b);
+                        rectMoveLeft(form.b);
+                        form.setForm(4);
+                    } else if(form.form == 4 && form.c.getX() + size < XMAX){
+                        rectMoveLeft(form.b);
+                        rectMoveDown(form.c);
+                        rectMoveRight(form.a);
+                        rectMoveRight(form.d);
+                        rectMoveDown(form.d);
+                        rectMoveDown(form.d);
+                        form.setForm(1);
+                    } else if(form.form == 4 && form.c.getX() + size >= XMAX){
+                        rectMoveUp(form.a);
+                        rectMoveLeft(form.c);
+                        rectMoveDown(form.d);
+                        rectMoveLeft(form.b);
+                        rectMoveLeft(form.b);
+                        rectMoveUp(form.b);
+                        form.setForm(1);
+                    } else if(form.form == 2 && form.c.getX() - size <= 0){
+                        rectMoveDown(form.a);
+                        rectMoveRight(form.c);
+                        rectMoveUp(form.d);
+                        rectMoveRight(form.b);
+                        rectMoveRight(form.b);
+                        rectMoveDown(form.b);
+                        form.setForm(3);
+                    }
+                break;
         }
     }
 }
