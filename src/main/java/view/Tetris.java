@@ -12,6 +12,7 @@ import javafx.concurrent.Task;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
+import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.Button;
@@ -29,6 +30,7 @@ import model.Form;
 import model.Highscore;
 import model.Controller;
 import java.io.FileInputStream;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Timer;
 import java.util.TimerTask;
@@ -88,6 +90,8 @@ public class Tetris extends Application {
     public static int lines;
     public static Form nextObj = Controller.makeRect();
     public static Form object;
+    public static Form holdObject;
+    public boolean isNextObj = true;
     private static boolean game = true;
     private boolean mainpage = false;
     private boolean delay = false;
@@ -201,29 +205,39 @@ public class Tetris extends Application {
         group.setPrefWidth(XMAX);
         group.setMaxHeight(YMAX);
         group.setMaxWidth(XMAX);
-        lblHold = new Label("HOLD");
+        lblHold = new Label("hold");
         lblHold.getStyleClass().add("label-style");
-        lblScore = new Label ("SCORE");
+        lblScore = new Label ("score");
         lblScore.getStyleClass().add("label-style");
-        lblLevel = new Label("LEVEL");
+        lblLevel = new Label("level");
         lblLevel.getStyleClass().add("label-style");
-        lblLines = new Label("LINES");
+        lblLines = new Label("lines");
         lblLines.getStyleClass().add("label-style");
-        lblNext = new Label("NEXT");
+        lblNext = new Label("next");
         lblNext.getStyleClass().add("label-style");
-        displayScore = new Label("");
-        displayLevel = new Label("");
-        displayLines = new Label("");
+        displayScore = new Label("5000");
+        displayScore.getStyleClass().add("display-style");
+        displayLevel = new Label("10");
+        displayLevel.getStyleClass().add("display-style");
+        displayLines = new Label("100");
+        displayLines.getStyleClass().add("display-style");
         paneHold.setPrefWidth(6 * SIZE);
         paneHold.setPrefHeight(4 * SIZE);
-        paneHold.setBackground(new Background(new BackgroundFill(Color.BLACK,
+        paneHold.setBackground(new Background(new BackgroundFill(Color.valueOf("#4a7326"),
                 CornerRadii.EMPTY,
                 Insets.EMPTY)));
+        Border b1 = new Border(new BorderStroke(Color.valueOf("#19260d"), BorderStrokeStyle.SOLID,
+                                CornerRadii.EMPTY, new BorderWidths(3)));
+        paneHold.setBorder(b1);
+        VBox.setMargin(paneHold, new Insets(0, 0, 50, 0));
         paneNext.setPrefWidth(6 * SIZE);
         paneNext.setPrefHeight(11 * SIZE);
-        paneNext.setBackground(new Background(new BackgroundFill(Color.BLACK,
+        paneNext.setBackground(new Background(new BackgroundFill(Color.valueOf("#4a7326"),
                 CornerRadii.EMPTY,
                 Insets.EMPTY)));
+        Border b2 = new Border(new BorderStroke(Color.valueOf("#19260d"), BorderStrokeStyle.SOLID,
+                CornerRadii.EMPTY, new BorderWidths(3)));
+        paneNext.setBorder(b2);
         holdBox = new VBox(lblHold, paneHold);
         scoreLevelLineBox = new VBox(lblScore, displayScore, lblLevel,
                                         displayLevel, lblLines, displayLines);
@@ -231,10 +245,10 @@ public class Tetris extends Application {
         infoBox = new VBox(holdBox, scoreLevelLineBox);
         alignmentBox = new HBox(infoBox, group, nextBox);
         mainBox = new HBox(alignmentBox);
-        HBox.setMargin(infoBox, new Insets(50, 0, 0, 0));
-        HBox.setMargin(group, new Insets(50, 100, 0, 0));
+        HBox.setMargin(infoBox, new Insets(50, 50, 0, 0));
+        HBox.setMargin(group, new Insets(50, 50, 0, 0));
         HBox.setMargin(nextBox, new Insets(50, 0, 0, 0));
-        HBox.setMargin(alignmentBox, new Insets(0, 0, 0, 190));
+        HBox.setMargin(alignmentBox, new Insets(0, 0, 0, 100));
         timer = new Timer();
         task = new TimerTask() {
             public void run() {
@@ -328,6 +342,10 @@ public class Tetris extends Application {
             });
         }
 
+   public void holdForm(Form form){
+
+   }
+
     //Zum einstellen des Levels bei click auf Button "Level.."
     public void click_btnLevel(){
         String[] btnData = btnLevel.getText().split(" ");
@@ -350,7 +368,6 @@ public class Tetris extends Application {
             stopped = false;
         }
     }
-
     //main
     public static void main(String[] args) {
         launch();

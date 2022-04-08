@@ -2,8 +2,6 @@
 
 @font-face {
     src: url("clock-font.ttf");
-    font-family: clock_font;
-    -fx-font-weight: bold;
 }
 
 /*Buttons*/
@@ -80,8 +78,21 @@
 
 /*Main-Site: Label-Style*/
 .label-style{
-    -fx-font-family: clock_font;
+    -fx-font-family: "DS-Digital";
+    -fx-font-weight: bold;
+    -fx-font-size: 40;
+    -fx-text-fill: black;
+}
+
+.display-style{
+    -fx-start-margin: 20;
     -fx-font-size: 25;
+    -fx-background-color: #4a7326;
+    -fx-border-width: 3;
+    -fx-border-color: #19260d;
+    -fx-text-fill: white;
+    -fx-pref-width: 100;
+    -fx-alignment: center;
 }
 
 /*VBox + HBox*/

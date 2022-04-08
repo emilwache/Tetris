@@ -1,5 +1,6 @@
 package model;
 
+import javafx.scene.layout.Pane;
 import javafx.scene.shape.Rectangle;
 import view.Tetris;
 
@@ -174,6 +175,7 @@ public class Controller {
             Tetris.object = a;
             Tetris.group.getChildren().addAll(a.a, a.b, a.c, a.d);
         }
+        removeRows(Tetris.group);
     }
 
 
@@ -529,6 +531,26 @@ public class Controller {
                     form.setForm(3);
                 }
                 break;
+        }
+    }
+
+    public static void removeRows(Pane pane){
+
+        ArrayList<Integer> lines = new ArrayList<>();
+        int fullRow = 0;
+
+        for(int i=0; i < Tetris.FIELD[0].length; i++){
+            for(int j=0; j < Tetris.FIELD.length; j++){
+                if(Tetris.FIELD[j][i] == 1){
+                    fullRow++;
+                }
+            }
+            if(fullRow == Tetris.FIELD.length){
+                lines.add(i);
+            }
+            fullRow = 0;
+        }
+        if(lines.size() > 0){
         }
     }
 }
