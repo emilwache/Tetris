@@ -1,5 +1,11 @@
 /* Style.css */
 
+@font-face {
+    src: url("clock-font.ttf");
+    font-family: clock_font;
+    -fx-font-weight: bold;
+}
+
 /*Buttons*/
 .start-buttons {
     -fx-padding: 8 15 15 15;
@@ -70,6 +76,12 @@
 .list-cell:odd {
     -fx-background-color: #8a946c;
     -fx-font-size: 15;
+}
+
+/*Main-Site: Label-Style*/
+.label-style{
+    -fx-font-family: clock_font;
+    -fx-font-size: 25;
 }
 
 /*VBox + HBox*/

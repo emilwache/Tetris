@@ -58,6 +58,7 @@ public class Tetris extends Application {
     private HBox settingBox;
 
     private FileInputStream tetris_logo;
+    private boolean stopped = false;
 
     //Variablen für Game
     private Scene mainScene;
@@ -67,6 +68,22 @@ public class Tetris extends Application {
     public static final int YMAX = 23 * SIZE;
     public static int[][] FIELD = new int[XMAX / SIZE][YMAX / SIZE];
     public static Pane group = new Pane();
+    private Label lblHold;
+    private Label lblScore;
+    private Label displayScore;
+    private Label lblLevel;
+    private Label displayLevel;
+    private Label lblLines;
+    private Label displayLines;
+    private Label lblNext;
+    private Pane paneHold = new Pane();
+    private Pane paneNext = new Pane();
+    private VBox holdBox;
+    private VBox scoreLevelLineBox;
+    private VBox nextBox;
+    private VBox infoBox;
+    private HBox alignmentBox;
+    private HBox mainBox;
     public static int score;
     public static int lines;
     public static Form nextObj = Controller.makeRect();
@@ -74,6 +91,8 @@ public class Tetris extends Application {
     private static boolean game = true;
     private boolean mainpage = false;
     private boolean delay = false;
+    private Timer timer;
+    private TimerTask task;
 
     //Start-Methode für Tetris-Game
     public void start(Stage stage) throws Exception {
@@ -182,9 +201,42 @@ public class Tetris extends Application {
         group.setPrefWidth(XMAX);
         group.setMaxHeight(YMAX);
         group.setMaxWidth(XMAX);
-
-        Timer timer = new Timer();
-        TimerTask task = new TimerTask() {
+        lblHold = new Label("HOLD");
+        lblHold.getStyleClass().add("label-style");
+        lblScore = new Label ("SCORE");
+        lblScore.getStyleClass().add("label-style");
+        lblLevel = new Label("LEVEL");
+        lblLevel.getStyleClass().add("label-style");
+        lblLines = new Label("LINES");
+        lblLines.getStyleClass().add("label-style");
+        lblNext = new Label("NEXT");
+        lblNext.getStyleClass().add("label-style");
+        displayScore = new Label("");
+        displayLevel = new Label("");
+        displayLines = new Label("");
+        paneHold.setPrefWidth(6 * SIZE);
+        paneHold.setPrefHeight(4 * SIZE);
+        paneHold.setBackground(new Background(new BackgroundFill(Color.BLACK,
+                CornerRadii.EMPTY,
+                Insets.EMPTY)));
+        paneNext.setPrefWidth(6 * SIZE);
+        paneNext.setPrefHeight(11 * SIZE);
+        paneNext.setBackground(new Background(new BackgroundFill(Color.BLACK,
+                CornerRadii.EMPTY,
+                Insets.EMPTY)));
+        holdBox = new VBox(lblHold, paneHold);
+        scoreLevelLineBox = new VBox(lblScore, displayScore, lblLevel,
+                                        displayLevel, lblLines, displayLines);
+        nextBox = new VBox(lblNext, paneNext);
+        infoBox = new VBox(holdBox, scoreLevelLineBox);
+        alignmentBox = new HBox(infoBox, group, nextBox);
+        mainBox = new HBox(alignmentBox);
+        HBox.setMargin(infoBox, new Insets(50, 0, 0, 0));
+        HBox.setMargin(group, new Insets(50, 100, 0, 0));
+        HBox.setMargin(nextBox, new Insets(50, 0, 0, 0));
+        HBox.setMargin(alignmentBox, new Insets(0, 0, 0, 190));
+        timer = new Timer();
+        task = new TimerTask() {
             public void run() {
                 if(!delay)
                 {
@@ -210,11 +262,8 @@ public class Tetris extends Application {
 
         };
         timer.schedule(task, 0, 300);
-
-        VBox.setMargin(group, new Insets(50, 0, 0, 150));
-        VBox vbox = new VBox(group);
-        vbox.setId("mainBox");
-        mainScene = new Scene(vbox, 1024, 768);
+        mainBox.setId("mainBox");
+        mainScene = new Scene(mainBox, 1024, 768);
 
         //setOnAction (btnLevel + btnPlay)
                 btnLevel.setOnAction(event -> click_btnLevel());
@@ -271,6 +320,9 @@ public class Tetris extends Application {
                         case SPACE:
                             Controller.fallOnKeyPress(form);
                             break;
+                        case ESCAPE:
+                            pauseOnEscape();
+                            break;
                     }
                 }
             });
@@ -285,6 +337,17 @@ public class Tetris extends Application {
             btnLevel.setText("Level " + 5);
         } else{
             btnLevel.setText("Level " + (Integer.parseInt(btnData[1]) + 5));
+        }
+    }
+
+    public void pauseOnEscape(){
+        if(!stopped){
+            timer.cancel();
+            stopped = true;
+        } else{
+            timer = new Timer();
+            timer.schedule(task, 0, 300);
+            stopped = false;
         }
     }
 
