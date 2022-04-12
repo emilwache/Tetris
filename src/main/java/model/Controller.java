@@ -1,5 +1,6 @@
 package model;
 
+import javafx.scene.Node;
 import javafx.scene.layout.Pane;
 import javafx.scene.shape.Rectangle;
 import view.Tetris;
@@ -153,6 +154,7 @@ public class Controller {
     }
 
     public static void moveDown(Form form) {
+        Tetris.removeRows(Tetris.group);
         int moveA = (int) (form.a.getY() + size);
         int moveB = (int) (form.b.getY() + size);
         int moveC = (int) (form.c.getY() + size);
@@ -170,16 +172,17 @@ public class Controller {
             field[(int) (form.b.getX() / size)][(int) (form.b.getY() / size)] = 1;
             field[(int) (form.c.getX() / size)][(int) (form.c.getY() / size)] = 1;
             field[(int) (form.d.getX() / size)][(int) (form.d.getY() / size)] = 1;
+            Tetris.removeRows(Tetris.group);
             Form a = Tetris.nextObj;
             Tetris.nextObj = Controller.makeRect();
             Tetris.object = a;
             Tetris.group.getChildren().addAll(a.a, a.b, a.c, a.d);
         }
-        removeRows(Tetris.group);
     }
 
 
     public static void moveDownOnKeyPress(Form form) {
+        Tetris.removeRows(Tetris.group);
         int moveA = (int) (form.a.getY() + size);
         int moveB = (int) (form.b.getY() + size);
         int moveC = (int) (form.c.getY() + size);
@@ -197,20 +200,24 @@ public class Controller {
             field[(int) (form.c.getX() / size)][(int) (form.c.getY() / size)] = 1;
             field[(int) (form.d.getX() / size)][(int) (form.d.getY() / size)] = 1;
         }
+            Tetris.removeRows(Tetris.group);
     }
 
     public static void fallOnKeyPress(Form form) {
+        Tetris.removeRows(Tetris.group);
         for (int i = 0; i < YMAX / size; i++) {
             if (form.a.getY() + size != 1 && form.b.getY() + size != 1 &&
                     form.c.getY() + size != 1 && form.d.getY() + size != 1) {
                 moveDownOnKeyPress(form);
+            } else{
+                Tetris.removeRows(Tetris.group);
+                Form a = Tetris.nextObj;
+                Tetris.nextObj = Controller.makeRect();
+                Tetris.object = a;
+                Tetris.group.getChildren().addAll(a.a, a.b, a.c, a.d);
+                return;
             }
         }
-        Form a = Tetris.nextObj;
-        Tetris.nextObj = Controller.makeRect();
-        Tetris.object = a;
-        Tetris.group.getChildren().addAll(a.a, a.b, a.c, a.d);
-
     }
 
     public static void rectMoveRight(Rectangle rect) {
@@ -534,23 +541,4 @@ public class Controller {
         }
     }
 
-    public static void removeRows(Pane pane){
-
-        ArrayList<Integer> lines = new ArrayList<>();
-        int fullRow = 0;
-
-        for(int i=0; i < Tetris.FIELD[0].length; i++){
-            for(int j=0; j < Tetris.FIELD.length; j++){
-                if(Tetris.FIELD[j][i] == 1){
-                    fullRow++;
-                }
-            }
-            if(fullRow == Tetris.FIELD.length){
-                lines.add(i);
-            }
-            fullRow = 0;
-        }
-        if(lines.size() > 0){
-        }
-    }
 }

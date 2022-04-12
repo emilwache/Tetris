@@ -91,7 +91,7 @@ public class Tetris extends Application {
     public static Form nextObj = Controller.makeRect();
     public static Form object;
     public static Form holdObject;
-    public boolean isNextObj = true;
+    public boolean isOnHold = false;
     private static boolean game = true;
     private boolean mainpage = false;
     private boolean delay = false;
@@ -280,15 +280,14 @@ public class Tetris extends Application {
         mainScene = new Scene(mainBox, 1024, 768);
 
         //setOnAction (btnLevel + btnPlay)
-                btnLevel.setOnAction(event -> click_btnLevel());
-                btnPlay.setOnAction(event -> {
-
-                    mainpage = true;
-                    if(txtName.getText().length() < 4) {
-                        name = txtName.getText();
-                    }
-                    stage.setScene(mainScene);
-                });
+        btnLevel.setOnAction(event -> click_btnLevel());
+        btnPlay.setOnAction(event -> {
+            mainpage = true;
+            if(txtName.getText().length() < 4) {
+                name = txtName.getText();
+            }
+            stage.setScene(mainScene);
+        });
 
         //Scene + Stage
         startScene = new Scene(box, 1024, 768);
@@ -301,14 +300,8 @@ public class Tetris extends Application {
 
     }
 
-
-    public void MoveDown(Rectangle rect) {
-        if(rect.getY() + MOVE < YMAX) {
-            rect.setY(rect.getY() + MOVE);
-        }
-    }
-
-     private void moveOnKeyPress(Form form) {
+    //moveOnKeyPress
+    private void moveOnKeyPress(Form form) {
             mainScene.setOnKeyPressed(new EventHandler<KeyEvent>() {
                 public void handle(KeyEvent event) {
                     switch (event.getCode()) {
@@ -337,16 +330,25 @@ public class Tetris extends Application {
                         case ESCAPE:
                             pauseOnEscape();
                             break;
+                        case C:
+                            holdForm(form);
+                            break;
                     }
                 }
             });
         }
 
-   public void holdForm(Form form){
+    //holdForm: Speichert eine Form temporär
+    public void holdForm(Form form){
 
-   }
+    }
 
-    //Zum einstellen des Levels bei click auf Button "Level.."
+    // nextForm: Zeigt die nächste Form an
+    public void nextForm(Form form){
+
+    }
+
+    //click_btnLevel: Schwierigkeitsgrad auswählen
     public void click_btnLevel(){
         String[] btnData = btnLevel.getText().split(" ");
         if(Integer.parseInt(btnData[1]) == 20){
@@ -358,16 +360,72 @@ public class Tetris extends Application {
         }
     }
 
+    //pauseOnEscape: Pausiert das Spiel, wenn man ESC drückt.
     public void pauseOnEscape(){
-        if(!stopped){
-            timer.cancel();
-            stopped = true;
-        } else{
-            timer = new Timer();
-            timer.schedule(task, 0, 300);
-            stopped = false;
-        }
+       Alert alert = new Alert(Alert.AlertType.INFORMATION);
+       alert.setTitle("Game-Pause");
+       alert.setHeaderText("The game is paused!");
+       alert.setContentText("Do you want to continue?");
+       alert.showAndWait();
     }
+
+    //removeRows: Löscht eine Reihe, wenn diese auf der Y-Achse voll ist.
+    public static void removeRows(Pane pane) {
+        ArrayList<Node> rects = new ArrayList<Node>();
+        ArrayList<Integer> line = new ArrayList<Integer>();
+        ArrayList<Node> newrects = new ArrayList<Node>();
+        int full = 0;
+        for (int i = 0; i < FIELD[0].length; i++) {
+            for (int j = 0; j < FIELD.length; j++) {
+                if (FIELD[j][i] == 1)
+                    full++;
+            }
+            if (full == FIELD.length)
+                line.add(i);
+            //lines.add(i + lines.size());
+            full = 0;
+        }
+        if (line.size() > 0)
+            do {
+                for (Node node : pane.getChildren()) {
+                    if (node instanceof Rectangle)
+                        rects.add(node);
+                }
+                for (Node node : rects) {
+                    Rectangle a = (Rectangle) node;
+                    if (a.getY() == line.get(0) * SIZE) {
+                        FIELD[(int) a.getX() / SIZE][(int) a.getY() / SIZE] = 0;
+                        pane.getChildren().remove(node);
+                    } else
+                        newrects.add(node);
+                }
+
+                for (Node node : newrects) {
+                    Rectangle a = (Rectangle) node;
+                    if (a.getY() < line.get(0) * SIZE) {
+                        FIELD[(int) a.getX() / SIZE][(int) a.getY() / SIZE] = 0;
+                        a.setY(a.getY() + SIZE);
+                    }
+                }
+                line.remove(0);
+                rects.clear();
+                newrects.clear();
+                for (Node node : pane.getChildren()) {
+                    if (node instanceof Rectangle)
+                        rects.add(node);
+                }
+                for (Node node : rects) {
+                    Rectangle a = (Rectangle) node;
+                    try {
+                        FIELD[(int) a.getX() / SIZE][(int) a.getY() / SIZE] = 1;
+                    } catch (ArrayIndexOutOfBoundsException e) {
+                    }
+                }
+                rects.clear();
+            } while (line.size() > 0);
+    }
+
+
     //main
     public static void main(String[] args) {
         launch();
