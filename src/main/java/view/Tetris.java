@@ -375,54 +375,31 @@ public class Tetris extends Application {
         ArrayList<Integer> line = new ArrayList<Integer>();
         ArrayList<Node> newrects = new ArrayList<Node>();
         int full = 0;
+        int allLines = 0;
         for (int i = 0; i < FIELD[0].length; i++) {
             for (int j = 0; j < FIELD.length; j++) {
                 if (FIELD[j][i] == 1)
                     full++;
             }
-            if (full == FIELD.length)
+            if (full == FIELD.length){
                 line.add(i);
-            //lines.add(i + lines.size());
+                allLines++;
+            }
             full = 0;
         }
-        if (line.size() > 0)
-            do {
-                for (Node node : pane.getChildren()) {
-                    if (node instanceof Rectangle)
-                        rects.add(node);
+        if(line.size() > 0){
+            for(int y = line.get(0); y<line.size(); y++){
+                for(int x = 0; x<FIELD.length; x++){
+                    FIELD[x][y] = 0;
                 }
-                for (Node node : rects) {
-                    Rectangle a = (Rectangle) node;
-                    if (a.getY() == line.get(0) * SIZE) {
-                        FIELD[(int) a.getX() / SIZE][(int) a.getY() / SIZE] = 0;
-                        pane.getChildren().remove(node);
-                    } else
-                        newrects.add(node);
+            }
+            for(int y = allLines-1; y > 0; y--){
+                for(int x = 0; x<FIELD.length; x++){
+                    FIELD[x][y+1] = FIELD[x][y];
+                    FIELD[x][y] = 0;
                 }
-
-                for (Node node : newrects) {
-                    Rectangle a = (Rectangle) node;
-                    if (a.getY() < line.get(0) * SIZE) {
-                        FIELD[(int) a.getX() / SIZE][(int) a.getY() / SIZE] = 0;
-                        a.setY(a.getY() + SIZE);
-                    }
-                }
-                line.remove(0);
-                rects.clear();
-                newrects.clear();
-                for (Node node : pane.getChildren()) {
-                    if (node instanceof Rectangle)
-                        rects.add(node);
-                }
-                for (Node node : rects) {
-                    Rectangle a = (Rectangle) node;
-                    try {
-                        FIELD[(int) a.getX() / SIZE][(int) a.getY() / SIZE] = 1;
-                    } catch (ArrayIndexOutOfBoundsException e) {
-                    }
-                }
-                rects.clear();
-            } while (line.size() > 0);
+            }
+        }
     }
 
 
