@@ -198,7 +198,6 @@ public class Controller {
             Tetris.object = a;
             Tetris.group.getChildren().addAll(a.a, a.b, a.c, a.d);
             Tetris.score += 1;
-            Tetris.updateScore();
             return true;
         }
     }
@@ -223,7 +222,6 @@ public class Controller {
             field[(int) (form.d.getX() / size)][(int) (form.d.getY() / size)] = 1;
             Tetris.removeRows(Tetris.group);
             Tetris.score += 20;
-            Tetris.updateScore();
         }
     }
 

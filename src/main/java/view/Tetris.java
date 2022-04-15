@@ -373,13 +373,8 @@ public class Tetris extends Application {
     public static void removeRows(Pane pane) {
         ArrayList<Node> rects = new ArrayList<Node>();
         ArrayList<Integer> line = new ArrayList<Integer>();
-        ArrayList<Node> newrects = new ArrayList<Node>();
         int full = 0;
         int allLines = 0;
-        int posAX = (int) object.a.getX()/SIZE; int posAY = (int) object.a.getY()/SIZE;
-        int posBX = (int) object.b.getX()/SIZE; int posBY = (int) object.b.getY()/SIZE;
-        int posCX = (int) object.c.getX()/SIZE; int posCY = (int) object.c.getY()/SIZE;
-        int posDX = (int) object.d.getX()/SIZE; int posDY = (int) object.d.getY()/SIZE;
 
         for (int i = 0; i < FIELD[0].length; i++) {
             for (int j = 0; j < FIELD.length; j++) {
@@ -395,21 +390,24 @@ public class Tetris extends Application {
             full = 0;
         }
         if(allLines > 0){
-            int firstLine = line.get(0);
+
             //Speichert alle Rechtecke in RECTS
             for (Node node : pane.getChildren()) {
                 if (node instanceof Rectangle)
                     rects.add(node);
             }
-            //FEHLER: Beim Löschen von mehr als zwei Zeilen gibt es einen bug inn der remove node schleife!!
-            //VIEL SPAß!!
+
+            for(Integer i : line){
+                System.out.println(i);
+            }
+            System.out.println(line.get(0) + " " + line.get(line.size()-1));
 
             //Löscht alle Rechtecke die in einer vollen Zeilen liegen
             for (Node node : rects) {
                 Rectangle a = (Rectangle) node;
                 if(node instanceof Rectangle){
-                    if (a.getY() <= line.get(0) * SIZE && a.getY() >= line.get(line.size()-1) * SIZE) {
-                        System.out.println("remove node");
+                    if (a.getY() >= line.get(0) * SIZE && a.getY() <= line.get(line.size()-1) * SIZE) {
+                        System.out.print("remove node ");
                         pane.getChildren().remove(node);
                     }
                 }
@@ -419,6 +417,7 @@ public class Tetris extends Application {
                 for(int x = 0; x<XMAX/SIZE; x++){
                     if(y <= line.get(0) && y >= line.get(line.size()-1)){
                         FIELD[x][y] = 0;
+                        System.out.print("remove node 0 ");
                     }
                 }
             }
@@ -427,8 +426,10 @@ public class Tetris extends Application {
                  Rectangle a = (Rectangle) node;
                  if(node instanceof Rectangle){
                      if(a.getY()/SIZE < line.get(0)){
-                         a.setY(a.getY() + SIZE * allLines);
-                         System.out.println("move node");
+                         for(int i = 0; i<allLines; i++){
+                             Controller.rectMoveDown(a);
+                         }
+                         System.out.print("move node ");
                      }
                  }
              }
@@ -438,7 +439,7 @@ public class Tetris extends Application {
                      if(y < line.get(0) && FIELD[x][y] == 1){
                          FIELD[x][y] = 0;
                          FIELD[x][y+allLines] = 1;
-                         System.out.println("move back");
+                         System.out.print("move back ");
                      }
                  }
              }
