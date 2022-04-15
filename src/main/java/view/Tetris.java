@@ -72,11 +72,11 @@ public class Tetris extends Application {
     public static Pane group = new Pane();
     private Label lblHold;
     private Label lblScore;
-    private Label displayScore;
+    private static Label displayScore;
     private Label lblLevel;
     private Label displayLevel;
     private Label lblLines;
-    private Label displayLines;
+    private static Label displayLines;
     private Label lblNext;
     private Pane paneHold = new Pane();
     private Pane paneNext = new Pane();
@@ -86,8 +86,8 @@ public class Tetris extends Application {
     private VBox infoBox;
     private HBox alignmentBox;
     private HBox mainBox;
-    public static int score;
-    public static int lines;
+    public static int score = 0;
+    public static int lines = 0;
     public static Form nextObj = Controller.makeRect();
     public static Form object;
     public static Form holdObject;
@@ -215,11 +215,11 @@ public class Tetris extends Application {
         lblLines.getStyleClass().add("label-style");
         lblNext = new Label("next");
         lblNext.getStyleClass().add("label-style");
-        displayScore = new Label("5000");
+        displayScore = new Label(String.valueOf(score));
         displayScore.getStyleClass().add("display-style");
         displayLevel = new Label("10");
         displayLevel.getStyleClass().add("display-style");
-        displayLines = new Label("100");
+        displayLines = new Label(String.valueOf(lines));
         displayLines.getStyleClass().add("display-style");
         paneHold.setPrefWidth(6 * SIZE);
         paneHold.setPrefHeight(4 * SIZE);
@@ -275,7 +275,7 @@ public class Tetris extends Application {
             }
 
         };
-        timer.schedule(task, 0, 300);
+        timer.schedule(task, 0, 500);
         mainBox.setId("mainBox");
         mainScene = new Scene(mainBox, 1024, 768);
 
@@ -376,6 +376,11 @@ public class Tetris extends Application {
         ArrayList<Node> newrects = new ArrayList<Node>();
         int full = 0;
         int allLines = 0;
+        int posAX = (int) object.a.getX()/SIZE; int posAY = (int) object.a.getY()/SIZE;
+        int posBX = (int) object.b.getX()/SIZE; int posBY = (int) object.b.getY()/SIZE;
+        int posCX = (int) object.c.getX()/SIZE; int posCY = (int) object.c.getY()/SIZE;
+        int posDX = (int) object.d.getX()/SIZE; int posDY = (int) object.d.getY()/SIZE;
+
         for (int i = 0; i < FIELD[0].length; i++) {
             for (int j = 0; j < FIELD.length; j++) {
                 if (FIELD[j][i] == 1)
@@ -384,24 +389,69 @@ public class Tetris extends Application {
             if (full == FIELD.length){
                 line.add(i);
                 allLines++;
+                score += 100;
+                lines += 1;
             }
             full = 0;
         }
-        if(line.size() > 0){
-            for(int y = line.get(0); y<line.size(); y++){
-                for(int x = 0; x<FIELD.length; x++){
-                    FIELD[x][y] = 0;
+        if(allLines > 0){
+            int firstLine = line.get(0);
+            //Speichert alle Rechtecke in RECTS
+            for (Node node : pane.getChildren()) {
+                if (node instanceof Rectangle)
+                    rects.add(node);
+            }
+            //FEHLER: Beim Löschen von mehr als zwei Zeilen gibt es einen bug inn der remove node schleife!!
+            //VIEL SPAß!!
+
+            //Löscht alle Rechtecke die in einer vollen Zeilen liegen
+            for (Node node : rects) {
+                Rectangle a = (Rectangle) node;
+                if(node instanceof Rectangle){
+                    if (a.getY() <= line.get(0) * SIZE && a.getY() >= line.get(line.size()-1) * SIZE) {
+                        System.out.println("remove node");
+                        pane.getChildren().remove(node);
+                    }
                 }
             }
-            for(int y = allLines-1; y > 0; y--){
-                for(int x = 0; x<FIELD.length; x++){
-                    FIELD[x][y+1] = FIELD[x][y];
-                    FIELD[x][y] = 0;
+            //Stellt die dazugehörigen 1er auf 0 (Kann man auch gleich in einer for-Schleife machen, hab aber was ausprobiert)
+            for(int y = YMAX; y>0; y--){
+                for(int x = 0; x<XMAX/SIZE; x++){
+                    if(y <= line.get(0) && y >= line.get(line.size()-1)){
+                        FIELD[x][y] = 0;
+                    }
                 }
             }
+            //Verschiebt alle Rechtecke um die Anzahl der gelöschten Zeilen
+             for(Node node : pane.getChildren()){
+                 Rectangle a = (Rectangle) node;
+                 if(node instanceof Rectangle){
+                     if(a.getY()/SIZE < line.get(0)){
+                         a.setY(a.getY() + SIZE * allLines);
+                         System.out.println("move node");
+                     }
+                 }
+             }
+             //Verschiebt die 1er und 0er (Kann man auch gleich in einer for-Schleife machen, hab aber was ausprobiert)
+             for(int y = YMAX; y>0; y--){
+                 for(int x = 0; x<XMAX/SIZE; x++){
+                     if(y < line.get(0) && FIELD[x][y] == 1){
+                         FIELD[x][y] = 0;
+                         FIELD[x][y+allLines] = 1;
+                         System.out.println("move back");
+                     }
+                 }
+             }
+             //Zum anschauen
+            for(int y = 15; y<YMAX/SIZE; y++){
+                for(int x = 0; x<XMAX/SIZE; x++){
+                    System.out.print(FIELD[x][y] + " ");
+                }
+                System.out.println();
+            }
+            System.out.println("--");
         }
     }
-
 
     //main
     public static void main(String[] args) {

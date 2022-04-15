@@ -153,8 +153,20 @@ public class Controller {
         }
     }
 
-    public static void moveDown(Form form) {
-        Tetris.removeRows(Tetris.group);
+    public static boolean canMoveDown(Form form){
+        int moveA = (int) (form.a.getY() + size);
+        int moveB = (int) (form.b.getY() + size);
+        int moveC = (int) (form.c.getY() + size);
+        int moveD = (int) (form.d.getY() + size);
+        if (moveA < YMAX && moveB < YMAX && moveC < YMAX && moveD < YMAX &&
+                field[(int) form.a.getX() / size][moveA / size] != 1 && field[(int) form.b.getX() / size][moveB / size] != 1 &&
+                field[(int) form.c.getX() / size][moveC / size] != 1 && field[(int) form.d.getX() / size][moveD / size] != 1) {
+            return true;
+        }
+            return false;
+        }
+
+    public static boolean moveDown(Form form) {
         int moveA = (int) (form.a.getY() + size);
         int moveB = (int) (form.b.getY() + size);
         int moveC = (int) (form.c.getY() + size);
@@ -167,29 +179,39 @@ public class Controller {
             form.b.setY(moveB);
             form.c.setY(moveC);
             form.d.setY(moveD);
+            return false;
         } else {
             field[(int) (form.a.getX() / size)][(int) (form.a.getY() / size)] = 1;
             field[(int) (form.b.getX() / size)][(int) (form.b.getY() / size)] = 1;
             field[(int) (form.c.getX() / size)][(int) (form.c.getY() / size)] = 1;
             field[(int) (form.d.getX() / size)][(int) (form.d.getY() / size)] = 1;
+            for(int y = 15; y<YMAX/size; y++){
+                for(int x = 0; x<XMAX/size; x++){
+                    System.out.print(field[x][y] + " ");
+                }
+                System.out.println();
+            }
+            System.out.println("--");
             Tetris.removeRows(Tetris.group);
             Form a = Tetris.nextObj;
             Tetris.nextObj = Controller.makeRect();
             Tetris.object = a;
             Tetris.group.getChildren().addAll(a.a, a.b, a.c, a.d);
+            Tetris.score += 1;
+            Tetris.updateScore();
+            return true;
         }
     }
 
 
     public static void moveDownOnKeyPress(Form form) {
-        Tetris.removeRows(Tetris.group);
         int moveA = (int) (form.a.getY() + size);
         int moveB = (int) (form.b.getY() + size);
         int moveC = (int) (form.c.getY() + size);
         int moveD = (int) (form.d.getY() + size);
         if (moveA < YMAX && moveB < YMAX && moveC < YMAX && moveD < YMAX &&
-                field[(int) form.a.getX() / size][moveA / size] != 1 && field[(int) form.b.getX() / size][moveB / size] != 1 &&
-                field[(int) form.c.getX() / size][moveC / size] != 1 && field[(int) form.d.getX() / size][moveD / size] != 1) {
+            field[(int) form.a.getX() / size][moveA / size] != 1 && field[(int) form.b.getX() / size][moveB / size] != 1 &&
+            field[(int) form.c.getX() / size][moveC / size] != 1 && field[(int) form.d.getX() / size][moveD / size] != 1) {
             form.a.setY(moveA);
             form.b.setY(moveB);
             form.c.setY(moveC);
@@ -199,22 +221,15 @@ public class Controller {
             field[(int) (form.b.getX() / size)][(int) (form.b.getY() / size)] = 1;
             field[(int) (form.c.getX() / size)][(int) (form.c.getY() / size)] = 1;
             field[(int) (form.d.getX() / size)][(int) (form.d.getY() / size)] = 1;
-        }
             Tetris.removeRows(Tetris.group);
+            Tetris.score += 20;
+            Tetris.updateScore();
+        }
     }
 
     public static void fallOnKeyPress(Form form) {
-        Tetris.removeRows(Tetris.group);
         for (int i = 0; i < YMAX / size; i++) {
-            if (form.a.getY() + size != 1 && form.b.getY() + size != 1 &&
-                    form.c.getY() + size != 1 && form.d.getY() + size != 1) {
-                moveDownOnKeyPress(form);
-            } else{
-                Tetris.removeRows(Tetris.group);
-                Form a = Tetris.nextObj;
-                Tetris.nextObj = Controller.makeRect();
-                Tetris.object = a;
-                Tetris.group.getChildren().addAll(a.a, a.b, a.c, a.d);
+            if(moveDown(form) == true){
                 return;
             }
         }
