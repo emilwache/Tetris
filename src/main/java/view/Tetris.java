@@ -275,7 +275,7 @@ public class Tetris extends Application {
             }
 
         };
-        timer.schedule(task, 0, 500);
+        timer.schedule(task, 0, 200);
         mainBox.setId("mainBox");
         mainScene = new Scene(mainBox, 1024, 768);
 
@@ -390,67 +390,33 @@ public class Tetris extends Application {
             full = 0;
         }
         if(allLines > 0){
-
-            //Speichert alle Rechtecke in RECTS
             for (Node node : pane.getChildren()) {
                 if (node instanceof Rectangle)
                     rects.add(node);
             }
 
-            for(Integer i : line){
-                System.out.println(i);
-            }
-            System.out.println(line.get(0) + " " + line.get(line.size()-1));
-
-            //Löscht alle Rechtecke die in einer vollen Zeilen liegen
             for (Node node : rects) {
                 Rectangle a = (Rectangle) node;
                 if(node instanceof Rectangle){
                     if (a.getY() >= line.get(0) * SIZE && a.getY() <= line.get(line.size()-1) * SIZE) {
                         System.out.print("remove node ");
                         pane.getChildren().remove(node);
+                        FIELD[(int) a.getX()/SIZE][(int) a.getY()/SIZE] = 0;
                     }
                 }
             }
-            //Stellt die dazugehörigen 1er auf 0 (Kann man auch gleich in einer for-Schleife machen, hab aber was ausprobiert)
-            for(int y = YMAX; y>0; y--){
-                for(int x = 0; x<XMAX/SIZE; x++){
-                    if(y <= line.get(0) && y >= line.get(line.size()-1)){
-                        FIELD[x][y] = 0;
-                        System.out.print("remove node 0 ");
-                    }
-                }
-            }
-            //Verschiebt alle Rechtecke um die Anzahl der gelöschten Zeilen
+
              for(Node node : pane.getChildren()){
                  Rectangle a = (Rectangle) node;
                  if(node instanceof Rectangle){
                      if(a.getY()/SIZE < line.get(0)){
-                         for(int i = 0; i<allLines; i++){
-                             Controller.rectMoveDown(a);
-                         }
+                         FIELD[(int) a.getX()/SIZE][(int) a.getY()/SIZE] = 0;
+                         FIELD[(int) a.getX()/SIZE][(int) a.getY()/SIZE + allLines] = 1;
+                         a.setY(a.getY() + SIZE * allLines);
                          System.out.print("move node ");
                      }
                  }
              }
-             //Verschiebt die 1er und 0er (Kann man auch gleich in einer for-Schleife machen, hab aber was ausprobiert)
-             for(int y = YMAX; y>0; y--){
-                 for(int x = 0; x<XMAX/SIZE; x++){
-                     if(y < line.get(0) && FIELD[x][y] == 1){
-                         FIELD[x][y] = 0;
-                         FIELD[x][y+allLines] = 1;
-                         System.out.print("move back ");
-                     }
-                 }
-             }
-             //Zum anschauen
-            for(int y = 15; y<YMAX/SIZE; y++){
-                for(int x = 0; x<XMAX/SIZE; x++){
-                    System.out.print(FIELD[x][y] + " ");
-                }
-                System.out.println();
-            }
-            System.out.println("--");
         }
     }
 
