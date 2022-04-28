@@ -79,7 +79,7 @@ public class Tetris extends Application {
     private static Label displayLines;
     private Label lblNext;
     private Pane paneHold = new Pane();
-    private Pane paneNext = new Pane();
+    public static Pane paneNext = new Pane();
     private VBox holdBox;
     private VBox scoreLevelLineBox;
     private VBox nextBox;
@@ -97,6 +97,8 @@ public class Tetris extends Application {
     private boolean delay = false;
     private Timer timer;
     private TimerTask task;
+    public static Form nextObject = Controller.makeRectNext();
+
 
     //Start-Methode für Tetris-Game
     public void start(Stage stage) throws Exception {
@@ -268,6 +270,8 @@ public class Tetris extends Application {
                         if (game && mainpage) {
                             Controller.moveDown(object);
                             moveOnKeyPress(object);
+                            paneNext.getChildren().removeAll(nextObject.a, nextObject.b, nextObject.c, nextObject.d);
+                            nextForm();
                         }
 
                     }
@@ -341,10 +345,13 @@ public class Tetris extends Application {
     //holdForm: Speichert eine Form temporär
     public void holdForm(Form form){
 
+
     }
 
     // nextForm: Zeigt die nächste Form an
-    public void nextForm(Form form){
+    public void nextForm(){
+                nextObject = Controller.makeRectNext();
+                paneNext.getChildren().addAll(nextObject.a, nextObject.b, nextObject.c, nextObject.d);
 
     }
 

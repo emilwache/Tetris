@@ -122,6 +122,103 @@ public class Controller {
         return new Form(a, b, c, d, name);
     }
 
+    public static Form makeRectNext() {
+        String form = Tetris.nextObj.getName();
+        Rectangle a = new Rectangle();
+        a.setWidth(24);
+        a.setHeight(24);
+        Rectangle b = new Rectangle();
+        b.setWidth(24);
+        b.setHeight(24);
+        Rectangle c = new Rectangle();
+        c.setWidth(24);
+        c.setHeight(24);
+        Rectangle d = new Rectangle();
+        d.setWidth(24);
+        d.setHeight(24);
+        String name = "";
+        switch (form) {
+            case "i": // I-Shape
+                a.setY(size);
+                a.setX((6*size) / 2 - 2 * size);
+                b.setY(size);
+                b.setX((6*size) / 2 - size);
+                c.setY(size);
+                c.setX((6*size) / 2);
+                d.setY(size);
+                d.setX((6*size) / 2 + size);
+                name = "i";
+                break;
+            case "j": //J-Shape
+                a.setY(size);
+                a.setX((6*size) / 2 - size);
+                b.setY(2 * size);
+                b.setX((6*size) / 2 - size);
+                c.setY(2 * size);
+                c.setX((6*size) / 2);
+                d.setY(2 * size);
+                d.setX((6*size) / 2 + size);
+                name = "j";
+                break;
+            case "l": //L-Shape
+                a.setY(size);
+                a.setX((6*size) / 2 + size);
+                b.setY(2 * size);
+                b.setX((6*size) / 2 - size);
+                c.setY(2 * size);
+                c.setX((6*size) / 2);
+                d.setY(2 * size);
+                d.setX((6*size) / 2 + size);
+                name = "l";
+                break;
+            case "s": // S-Shape
+                a.setY(size);
+                a.setX((6*size) / 2 + size);
+                b.setY(size);
+                b.setX((6*size) / 2);
+                c.setY(2 * size);
+                c.setX((6*size) / 2);
+                d.setY(2 * size);
+                d.setX((6*size) / 2 - size);
+                name = "s";
+                break;
+            case "z":  // Z-Shape
+                a.setY(size);
+                a.setX((6*size) / 2 - size);
+                b.setY(size);
+                b.setX((6*size) / 2);
+                c.setY(2 * size);
+                c.setX((6*size) / 2);
+                d.setY(2 * size);
+                d.setX((6*size) / 2 + size);
+                name = "z";
+                break;
+            case "o": //O-Shape
+                a.setY(size);
+                a.setX((6*size) / 2 - size);
+                b.setY(size);
+                b.setX((6*size) / 2);
+                c.setY(2 * size);
+                c.setX((6*size) / 2 - size);
+                d.setY(2 * size);
+                d.setX((6*size) / 2);
+                name = "o";
+                break;
+            case "t": //T-Shape
+                a.setY(size);
+                a.setX((6*size) / 2);
+                b.setY(2 * size);
+                b.setX((6*size) / 2 - size);
+                c.setY(2 * size);
+                c.setX((6*size) / 2);
+                d.setY(2 * size);
+                d.setX((6*size) / 2 + size);
+                name = "t";
+                break;
+        }
+        return new Form(a, b, c, d, name);
+    }
+
     public static void moveRight(Form form) {
         int moveRa = (int) (form.a.getX() + size);
         int moveRb = (int) (form.b.getX() + size);
@@ -198,6 +295,7 @@ public class Controller {
             Tetris.object = a;
             Tetris.group.getChildren().addAll(a.a, a.b, a.c, a.d);
             Tetris.score += 1;
+
             return true;
         }
     }
