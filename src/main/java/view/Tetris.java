@@ -223,7 +223,7 @@ public class Tetris extends Application {
         displayLevel.getStyleClass().add("display-style");
         displayLines = new Label(String.valueOf(lines));
         displayLines.getStyleClass().add("display-style");
-        paneHold.setPrefWidth(6 * SIZE);
+        paneHold.setPrefWidth(7 * SIZE);
         paneHold.setPrefHeight(4 * SIZE);
         paneHold.setBackground(new Background(new BackgroundFill(Color.valueOf("#4a7326"),
                 CornerRadii.EMPTY,
@@ -232,8 +232,8 @@ public class Tetris extends Application {
                                 CornerRadii.EMPTY, new BorderWidths(3)));
         paneHold.setBorder(b1);
         VBox.setMargin(paneHold, new Insets(0, 0, 50, 0));
-        paneNext.setPrefWidth(6 * SIZE);
-        paneNext.setPrefHeight(11 * SIZE);
+        paneNext.setPrefWidth(7 * SIZE);
+        paneNext.setPrefHeight(4 * SIZE);
         paneNext.setBackground(new Background(new BackgroundFill(Color.valueOf("#4a7326"),
                 CornerRadii.EMPTY,
                 Insets.EMPTY)));

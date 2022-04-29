@@ -20,7 +20,7 @@ public class Controller {
     public Controller() {
     }
 
-    public static Form makeRect() {
+    public static Form makeRect(){
         Random random = new Random();
         int form = random.nextInt(7) + 1;
         if (randomNum == form) {
@@ -139,14 +139,14 @@ public class Controller {
         String name = "";
         switch (form) {
             case "i": // I-Shape
-                a.setY(size);
-                a.setX((6*size) / 2 - 2 * size);
-                b.setY(size);
-                b.setX((6*size) / 2 - size);
-                c.setY(size);
-                c.setX((6*size) / 2);
-                d.setY(size);
-                d.setX((6*size) / 2 + size);
+                a.setY(size * 1.5);
+                a.setX((6*size) / 2 - 1.5 * size);
+                b.setY(size * 1.5);
+                b.setX((6*size) / 2 - 0.5 * size);
+                c.setY(size * 1.5);
+                c.setX((6*size) / 2 + 0.5 * size);
+                d.setY(size * 1.5);
+                d.setX((6*size) / 2 + 1.5 * size);
                 name = "i";
                 break;
             case "j": //J-Shape
@@ -195,13 +195,13 @@ public class Controller {
                 break;
             case "o": //O-Shape
                 a.setY(size);
-                a.setX((6*size) / 2 - size);
+                a.setX((6*size) / 2 - 0.5 * size);
                 b.setY(size);
-                b.setX((6*size) / 2);
+                b.setX((6*size) / 2 + 0.5 * size);
                 c.setY(2 * size);
-                c.setX((6*size) / 2 - size);
+                c.setX((6*size) / 2 - 0.5 * size);
                 d.setY(2 * size);
-                d.setX((6*size) / 2);
+                d.setX((6*size) / 2 + 0.5 * size);
                 name = "o";
                 break;
             case "t": //T-Shape
