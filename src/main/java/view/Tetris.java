@@ -90,6 +90,7 @@ public class Tetris extends Application {
     public static int lines = 0;
     public static int level = 0;
     public static int speed = 500;
+    public static boolean haschanged = false;
     public static Form nextObj = Controller.makeRect();
     public static Form object;
     public static Form holdObject;
@@ -195,69 +196,84 @@ public class Tetris extends Application {
 
 
         //MainSeite
+        //Setzt alle Felder im Array auf 0
          for (int[] a : FIELD) {
              Arrays.fill(a, 0);
          }
+
+        //Fügt eine neue Form am Start des Spiels hinzu
         Form a = nextObj;
         group.getChildren().addAll(a.a, a.b, a.c, a.d);
         object = a;
         nextObj = Controller.makeRect();
+
+        //Border und größe für das Spielfeld
         Border b = new Border(new BorderStroke(Color.BLACK, BorderStrokeStyle.SOLID, CornerRadii.EMPTY, BorderWidths.DEFAULT));
         group.setBorder(b);
-        group.setPrefHeight(YMAX);
-        group.setPrefWidth(XMAX);
-        group.setMaxHeight(YMAX);
-        group.setMaxWidth(XMAX);
+        group.setPrefSize(XMAX, YMAX);
+        group.setMaxSize(XMAX, YMAX);
+        
+        //Hold-Label
         lblHold = new Label("hold");
         lblHold.getStyleClass().add("label-style");
+        //Score-Label
         lblScore = new Label ("score");
         lblScore.getStyleClass().add("label-style");
+        //Level-Label
         lblLevel = new Label("level");
         lblLevel.getStyleClass().add("label-style");
+        //Lines-Label
         lblLines = new Label("lines");
         lblLines.getStyleClass().add("label-style");
+        //Next-Label
         lblNext = new Label("next");
         lblNext.getStyleClass().add("label-style");
+
+        //Start-Text für Score, Level und Lines
         displayScore = new Label(String.valueOf(score));
         displayScore.getStyleClass().add("display-style");
         displayLevel = new Label(String.valueOf(level));
         displayLevel.getStyleClass().add("display-style");
         displayLines = new Label(String.valueOf(lines));
         displayLines.getStyleClass().add("display-style");
+
+        //Größe, Style und Allignment für paneHold
         paneHold.setPrefWidth(7 * SIZE);
         paneHold.setPrefHeight(4 * SIZE);
-        paneHold.setBackground(new Background(new BackgroundFill(Color.valueOf("#4a7326"),
-                CornerRadii.EMPTY,
-                Insets.EMPTY)));
-        Border b1 = new Border(new BorderStroke(Color.valueOf("#19260d"), BorderStrokeStyle.SOLID,
-                                CornerRadii.EMPTY, new BorderWidths(3)));
+        paneHold.setBackground(new Background(new BackgroundFill(Color.valueOf("#4a7326"), CornerRadii.EMPTY, Insets.EMPTY)));
+        Border b1 = new Border(new BorderStroke(Color.valueOf("#19260d"), BorderStrokeStyle.SOLID, CornerRadii.EMPTY, new BorderWidths(3)));
         paneHold.setBorder(b1);
-        VBox.setMargin(paneHold, new Insets(0, 0, 50, 0));
+
+        //Größe und Style für paneNext
         paneNext.setPrefWidth(7 * SIZE);
         paneNext.setPrefHeight(4 * SIZE);
-        paneNext.setBackground(new Background(new BackgroundFill(Color.valueOf("#4a7326"),
-                CornerRadii.EMPTY,
-                Insets.EMPTY)));
-        Border b2 = new Border(new BorderStroke(Color.valueOf("#19260d"), BorderStrokeStyle.SOLID,
-                CornerRadii.EMPTY, new BorderWidths(3)));
+        paneNext.setBackground(new Background(new BackgroundFill(Color.valueOf("#4a7326"), CornerRadii.EMPTY, Insets.EMPTY)));
+        Border b2 = new Border(new BorderStroke(Color.valueOf("#19260d"), BorderStrokeStyle.SOLID, CornerRadii.EMPTY, new BorderWidths(3)));
         paneNext.setBorder(b2);
+
+        //V- und HBox Allignments
         holdBox = new VBox(lblHold, paneHold);
-        scoreLevelLineBox = new VBox(lblScore, displayScore, lblLevel,
-                                        displayLevel, lblLines, displayLines);
+        scoreLevelLineBox = new VBox(lblScore, displayScore, lblLevel, displayLevel, lblLines, displayLines);
         nextBox = new VBox(lblNext, paneNext);
         infoBox = new VBox(holdBox, scoreLevelLineBox);
         alignmentBox = new HBox(infoBox, group, nextBox);
         mainBox = new HBox(alignmentBox);
+
+        //Margins
+        VBox.setMargin(paneHold, new Insets(0, 0, 50, 0));
         HBox.setMargin(infoBox, new Insets(50, 50, 0, 0));
         HBox.setMargin(group, new Insets(50, 50, 0, 0));
         HBox.setMargin(nextBox, new Insets(50, 0, 0, 0));
         HBox.setMargin(alignmentBox, new Insets(0, 0, 0, 100));
+
+        //GameLoop
         timer = new Timer();
         task = new TimerTask() {
             public void run() {
                 if(!delay)
                 {
                     try {
+                        //3-Sekunden Delay beim Start des Spiels
                         TimeUnit.SECONDS.sleep(3);
                     } catch (InterruptedException e) {
                         e.printStackTrace();
@@ -266,9 +282,9 @@ public class Tetris extends Application {
                 }
 
                 Platform.runLater(new Runnable() {
-                    @Override
                     public void run() {
                         if (game && mainpage) {
+                            //GameLoop
                             Controller.moveDown(object);
                             moveOnKeyPress(object);
                             paneNext.getChildren().removeAll(nextObject.a, nextObject.b, nextObject.c, nextObject.d);
@@ -277,11 +293,9 @@ public class Tetris extends Application {
                             displayLines.setText(String.valueOf(lines));
                             displayLevel.setText(String.valueOf(level));
                         }
-
                     }
                 });
             }
-
         };
         timer.schedule(task, 0, speed);
         mainBox.setId("mainBox");
@@ -310,45 +324,46 @@ public class Tetris extends Application {
 
     //moveOnKeyPress
     private void moveOnKeyPress(Form form) {
-            mainScene.setOnKeyPressed(new EventHandler<KeyEvent>() {
-                public void handle(KeyEvent event) {
-                    switch (event.getCode()) {
-                        case RIGHT:
-                            Controller.moveRight(form);
-                            break;
-                        case DOWN:
-                            Controller.moveDownOnKeyPress(form);
-                            score++;
-                            break;
-                        case LEFT:
-                            Controller.moveLeft(form);
-                            break;
-                        case A:
-                            Controller.moveLeft(form);
-                            break;
-                        case D:
-                            Controller.moveRight(form);
-                            break;
-                        case UP:
-                            Controller.turn(form);
-                            break;
-                        case SPACE:
-                            Controller.fallOnKeyPress(form);
-                            break;
-                        case ESCAPE:
-                            pauseOnEscape();
-                            break;
-                        case C:
-                            holdForm();
-                            break;
-                    }
+        mainScene.setOnKeyPressed(new EventHandler<KeyEvent>() {
+            public void handle(KeyEvent event) {
+                switch (event.getCode()) {
+                    case RIGHT:
+                        Controller.moveRight(form);
+                        break;
+                    case DOWN:
+                        Controller.moveDownOnKeyPress(form);
+                        score++;
+                        break;
+                    case LEFT:
+                        Controller.moveLeft(form);
+                        break;
+                    case A:
+                        Controller.moveLeft(form);
+                        break;
+                    case D:
+                        Controller.moveRight(form);
+                        break;
+                    case UP:
+                        Controller.turn(form);
+                        break;
+                    case SPACE:
+                        Controller.fallOnKeyPress(form);
+                        break;
+                    case ESCAPE:
+                        pauseOnEscape();
+                        break;
+                    case C:
+                        holdForm();
+                        break;
                 }
-            });
-        }
+            }
+        });
+    }
 
     //holdForm: Speichert eine Form temporär
     public void holdForm(){
         if(paneHold.getChildren().isEmpty()){
+            haschanged = true;
             holdObject = Controller.makeRectHold();
             paneHold.getChildren().addAll(holdObject.a, holdObject.b, holdObject.c, holdObject.d);
             group.getChildren().removeAll(object.a, object.b, object.c, object.d);
@@ -356,13 +371,15 @@ public class Tetris extends Application {
             nextObj = Controller.makeRect();
             object = a;
             group.getChildren().addAll(a.a, a.b, a.c, a.d);
-        } else{
-            Form holdObj = Controller.makeHoldRect();
-            Form currentObj = Controller.makeRectHold();
-            paneHold.getChildren().removeAll(holdObject.a, holdObject.b, holdObject.c, holdObject.d);
+        } else if(!haschanged){
+            haschanged = true;
+            Form aktObj = Controller.makeRectHold(); //auf dem Spielfeld
             group.getChildren().removeAll(object.a, object.b, object.c, object.d);
-            paneHold.getChildren().addAll(currentObj.a, currentObj.b, currentObj.c, currentObj.d);
-            group.getChildren().addAll(holdObj.a, holdObj.b, holdObj.c, holdObj.d);
+            object = Controller.makeHoldRect(); //aus dem hold feld
+            paneHold.getChildren().removeAll(holdObject.a, holdObject.b, holdObject.c, holdObject.d);
+            holdObject = aktObj;
+            group.getChildren().addAll(object.a, object.b, object.c, object.d);
+            paneHold.getChildren().addAll(holdObject.a, holdObject.b, holdObject.c, holdObject.d);
         }
     }
 

@@ -476,6 +476,7 @@ public class Controller {
             field[(int) (form.b.getX() / size)][(int) (form.b.getY() / size)] = 1;
             field[(int) (form.c.getX() / size)][(int) (form.c.getY() / size)] = 1;
             field[(int) (form.d.getX() / size)][(int) (form.d.getY() / size)] = 1;
+            Tetris.haschanged = false;
             for(int y = 15; y<YMAX/size; y++){
                 for(int x = 0; x<XMAX/size; x++){
                     System.out.print(field[x][y] + " ");
@@ -512,6 +513,7 @@ public class Controller {
             field[(int) (form.b.getX() / size)][(int) (form.b.getY() / size)] = 1;
             field[(int) (form.c.getX() / size)][(int) (form.c.getY() / size)] = 1;
             field[(int) (form.d.getX() / size)][(int) (form.d.getY() / size)] = 1;
+            Tetris.haschanged = false;
             Tetris.removeRows(Tetris.group);
             Tetris.score += 20;
         }
