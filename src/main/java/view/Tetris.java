@@ -88,10 +88,11 @@ public class Tetris extends Application {
     private HBox mainBox;
     public static int score = 0;
     public static int lines = 0;
+    public static int level = 0;
+    public static int speed = 500;
     public static Form nextObj = Controller.makeRect();
     public static Form object;
     public static Form holdObject;
-    public boolean isOnHold = false;
     private static boolean game = true;
     private boolean mainpage = false;
     private boolean delay = false;
@@ -219,7 +220,7 @@ public class Tetris extends Application {
         lblNext.getStyleClass().add("label-style");
         displayScore = new Label(String.valueOf(score));
         displayScore.getStyleClass().add("display-style");
-        displayLevel = new Label("10");
+        displayLevel = new Label(String.valueOf(level));
         displayLevel.getStyleClass().add("display-style");
         displayLines = new Label(String.valueOf(lines));
         displayLines.getStyleClass().add("display-style");
@@ -272,6 +273,9 @@ public class Tetris extends Application {
                             moveOnKeyPress(object);
                             paneNext.getChildren().removeAll(nextObject.a, nextObject.b, nextObject.c, nextObject.d);
                             nextForm();
+                            displayScore.setText(String.valueOf(score));
+                            displayLines.setText(String.valueOf(lines));
+                            displayLevel.setText(String.valueOf(level));
                         }
 
                     }
@@ -279,7 +283,7 @@ public class Tetris extends Application {
             }
 
         };
-        timer.schedule(task, 0, 200);
+        timer.schedule(task, 0, speed);
         mainBox.setId("mainBox");
         mainScene = new Scene(mainBox, 1024, 768);
 
@@ -335,7 +339,7 @@ public class Tetris extends Application {
                             pauseOnEscape();
                             break;
                         case C:
-                            holdForm(form);
+                            holdForm();
                             break;
                     }
                 }
@@ -343,9 +347,23 @@ public class Tetris extends Application {
         }
 
     //holdForm: Speichert eine Form temporär
-    public void holdForm(Form form){
-
-
+    public void holdForm(){
+        if(paneHold.getChildren().isEmpty()){
+            holdObject = Controller.makeRectHold();
+            paneHold.getChildren().addAll(holdObject.a, holdObject.b, holdObject.c, holdObject.d);
+            group.getChildren().removeAll(object.a, object.b, object.c, object.d);
+            Form a = nextObj;
+            nextObj = Controller.makeRect();
+            object = a;
+            group.getChildren().addAll(a.a, a.b, a.c, a.d);
+        } else{
+            Form holdObj = Controller.makeHoldRect();
+            Form currentObj = Controller.makeRectHold();
+            paneHold.getChildren().removeAll(holdObject.a, holdObject.b, holdObject.c, holdObject.d);
+            group.getChildren().removeAll(object.a, object.b, object.c, object.d);
+            paneHold.getChildren().addAll(currentObj.a, currentObj.b, currentObj.c, currentObj.d);
+            group.getChildren().addAll(holdObj.a, holdObj.b, holdObj.c, holdObj.d);
+        }
     }
 
     // nextForm: Zeigt die nächste Form an
@@ -360,10 +378,17 @@ public class Tetris extends Application {
         String[] btnData = btnLevel.getText().split(" ");
         if(Integer.parseInt(btnData[1]) == 20){
             btnLevel.setText("Level " + 1);
+            level = 1;
+            speed = 500;
+
         } else if(Integer.parseInt(btnData[1]) == 1){
             btnLevel.setText("Level " + 5);
+            level = 5;
+            speed = 450;
         } else{
             btnLevel.setText("Level " + (Integer.parseInt(btnData[1]) + 5));
+            level += 5;
+            speed = 500 - level*10;
         }
     }
 
