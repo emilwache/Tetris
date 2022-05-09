@@ -8,7 +8,6 @@ import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import javafx.concurrent.Task;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
@@ -94,7 +93,7 @@ public class Tetris extends Application {
     public static Form nextObj = Controller.makeRect();
     public static Form object;
     public static Form holdObject;
-    private static boolean game = true;
+    public static boolean game = true;
     private boolean mainpage = false;
     private boolean delay = false;
     private Timer timer;
@@ -292,12 +291,21 @@ public class Tetris extends Application {
                             displayScore.setText(String.valueOf(score));
                             displayLines.setText(String.valueOf(lines));
                             displayLevel.setText(String.valueOf(level));
+                        } else if(!game){
+                            Alert alert = new Alert(Alert.AlertType.ERROR);
+                            alert.setTitle("GAME OVER");
+                            alert.setHeaderText("You have lost");
+                            alert.setContentText("Do you want to play a new game?");
+                            //alert.showAndWait();
+                            task.cancel();
+                            timer.cancel();
+                            timer.purge();
                         }
                     }
                 });
             }
         };
-        timer.schedule(task, 0, speed);
+        timer.schedule(task, 0, 200);
         mainBox.setId("mainBox");
         mainScene = new Scene(mainBox, 1024, 768);
 

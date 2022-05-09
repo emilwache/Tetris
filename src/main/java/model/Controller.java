@@ -1,10 +1,8 @@
 package model;
 
 import javafx.scene.Node;
-import javafx.scene.layout.Pane;
 import javafx.scene.shape.Rectangle;
 import view.Tetris;
-
 import java.util.ArrayList;
 import java.util.Random;
 
@@ -472,19 +470,36 @@ public class Controller {
             form.d.setY(moveD);
             return false;
         } else {
+            //setzt die Form auf 1, wenn sie am Boden angekommen ist
             field[(int) (form.a.getX() / size)][(int) (form.a.getY() / size)] = 1;
             field[(int) (form.b.getX() / size)][(int) (form.b.getY() / size)] = 1;
             field[(int) (form.c.getX() / size)][(int) (form.c.getY() / size)] = 1;
             field[(int) (form.d.getX() / size)][(int) (form.d.getY() / size)] = 1;
+            //Damit man nur einmal pro Form switchen kann
             Tetris.haschanged = false;
-            for(int y = 15; y<YMAX/size; y++){
-                for(int x = 0; x<XMAX/size; x++){
-                    System.out.print(field[x][y] + " ");
-                }
-                System.out.println();
+
+            //Um zu versichern, dass alle Rectangles auf 1 gestellt sind
+            ArrayList<Node> rects = new ArrayList<Node>();
+            for (Node node : Tetris.group.getChildren()) {
+                if (node instanceof Rectangle)
+                    rects.add(node);
             }
-            System.out.println("--");
+            for(Node node : rects){
+                Rectangle rec = (Rectangle) node;
+                if(node instanceof Rectangle){
+                    Tetris.FIELD[(int) rec.getX()/size][(int) rec.getY()/size] = 1;
+                }
+            }
+
+            if(form.a.getY() == size || form.b.getY() == size ||
+               form.c.getY() == size || form.d.getY() == size){
+                System.out.println("game over!");
+                Tetris.game = false;
+            }
+
+            //Schaut ob eine Reihe gelöscht werden muss
             Tetris.removeRows(Tetris.group);
+            //erzeugt ein neues Objekt
             Form a = Tetris.nextObj;
             Tetris.nextObj = Controller.makeRect();
             Tetris.object = a;
