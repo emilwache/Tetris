@@ -36,14 +36,13 @@ import java.util.TimerTask;
 import java.util.concurrent.TimeUnit;
 
 public class Tetris extends Application {
-    private Scene startScene;
 
+    //Variablen für die Start-Seite
+    private Scene startScene;
     private ObservableList<Highscore> highscore;
 
     private Label lblName;
-    private Font fontLblName;
     private TextField txtName;
-    private String name;
     private Button btnPlay;
     private Button btnLevel;
     private ListView scoreView;
@@ -59,16 +58,27 @@ public class Tetris extends Application {
     private HBox settingBox;
 
     private FileInputStream tetris_logo;
-    private boolean stopped = false;
 
-    //Variablen für Game
+    //Variablen für die Option Scene
+
+
+    //Variablen für das Game
     private Scene mainScene;
-    public static final int MOVE = 25;
+
     public static final int SIZE = 25;
     public static final int XMAX = 12 * SIZE;
     public static final int YMAX = 23 * SIZE;
     public static int[][] FIELD = new int[XMAX / SIZE][YMAX / SIZE];
+
+    public static int score = 0;
+    public static int lines = 0;
+    public static int level = 0;
+    public static int speed = 500;
+
     public static Pane group = new Pane();
+    public static Pane paneHold = new Pane();
+    public static Pane paneNext = new Pane();
+
     private Label lblHold;
     private Label lblScore;
     private static Label displayScore;
@@ -77,34 +87,33 @@ public class Tetris extends Application {
     private Label lblLines;
     private static Label displayLines;
     private Label lblNext;
-    private Pane paneHold = new Pane();
-    public static Pane paneNext = new Pane();
+    private String name;
+
     private VBox holdBox;
     private VBox scoreLevelLineBox;
     private VBox nextBox;
     private VBox infoBox;
     private HBox alignmentBox;
     private HBox mainBox;
-    public static int score = 0;
-    public static int lines = 0;
-    public static int level = 0;
-    public static int speed = 500;
+
     public static boolean haschanged = false;
     public static Form nextObj = Controller.makeRect();
     public static Form object;
     public static Form holdObject;
+    public static Form nextObject = Controller.makeRectNext();
+
     public static boolean game = true;
     private boolean mainpage = false;
     private boolean delay = false;
+
     private Timer timer;
     private TimerTask task;
-    public static Form nextObject = Controller.makeRectNext();
-
 
     //Start-Methode für Tetris-Game
     public void start(Stage stage) throws Exception {
 
-        //StartSeite
+        //Start-Seite
+
         //Label name
         lblName = new Label("TETRIS");
         lblName.setId("lblName");
@@ -193,6 +202,7 @@ public class Tetris extends Application {
         VBox.setMargin(playBox, new Insets(10));
         VBox.setMargin(scoreBox, new Insets(10, 0, 0, 0));
 
+        //Option Scene
 
         //MainSeite
         //Setzt alle Felder im Array auf 0
