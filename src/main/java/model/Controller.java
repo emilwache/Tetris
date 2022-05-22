@@ -26,17 +26,17 @@ public class Controller {
         }
         randomNum = form;
         Rectangle a = new Rectangle();
-        a.setWidth(24);
-        a.setHeight(24);
+        a.setWidth(25);
+        a.setHeight(25);
         Rectangle b = new Rectangle();
-        b.setWidth(24);
-        b.setHeight(24);
+        b.setWidth(25);
+        b.setHeight(25);
         Rectangle c = new Rectangle();
-        c.setWidth(24);
-        c.setHeight(24);
+        c.setWidth(25);
+        c.setHeight(25);
         Rectangle d = new Rectangle();
-        d.setWidth(24);
-        d.setHeight(24);
+        d.setWidth(25);
+        d.setHeight(25);
         String name = "";
         switch (form) {
             case 1: // I-Shape
@@ -463,7 +463,6 @@ public class Controller {
         if (moveA < YMAX && moveB < YMAX && moveC < YMAX && moveD < YMAX &&
                 field[(int) form.a.getX() / size][moveA / size] != 1 && field[(int) form.b.getX() / size][moveB / size] != 1 &&
                 field[(int) form.c.getX() / size][moveC / size] != 1 && field[(int) form.d.getX() / size][moveD / size] != 1) {
-
             form.a.setY(moveA);
             form.b.setY(moveB);
             form.c.setY(moveC);

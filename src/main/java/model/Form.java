@@ -3,6 +3,7 @@ package model;
 
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
+import javafx.scene.shape.StrokeType;
 
 public class Form {
     public Rectangle a;
@@ -10,6 +11,7 @@ public class Form {
     public Rectangle c;
     public Rectangle d;
     public Color color;
+    public Color colorstroke;
     public String name;
     public int form = 1;
 
@@ -29,38 +31,49 @@ public class Form {
         switch (name) {
             case "i":
                 color = Color.valueOf("#547a1d");
+                colorstroke = Color.valueOf("#2c400f");
                 break;
             case "j":
                 color = Color.valueOf("#3b5c0a");
+                colorstroke = Color.valueOf("#273d07");
                 break;
             case "l":
                 color = Color.valueOf("#101c05");
+                colorstroke = Color.valueOf("#0c1404");
                 break;
             case "s":
                 color = Color.valueOf("#19260d");
+                colorstroke = Color.valueOf("#16210b");
                 break;
             case "z":
                 color = Color.valueOf("#314c1a");
+                colorstroke = Color.valueOf("#1f3010");
                 break;
             case "o":
                 color = Color.valueOf("#4a7326");
+                colorstroke = Color.valueOf("#314d18");
                 break;
             case "t":
                 color = Color.valueOf("#629b31");
+                colorstroke = Color.valueOf("#466e23");
                 break;
         }
         this.a.setFill(color);
-        a.setStroke(Color.BLACK);
-        a.setStrokeWidth(1);
+        a.setStroke(colorstroke);
+        a.setStrokeType(StrokeType.INSIDE);
+        a.setStrokeWidth(5);
         this.b.setFill(color);
-        b.setStroke(Color.BLACK);
-        b.setStrokeWidth(1);
+        b.setStroke(colorstroke);
+        b.setStrokeType(StrokeType.INSIDE);
+        b.setStrokeWidth(5);
         this.c.setFill(color);
-        c.setStroke(Color.BLACK);
-        c.setStrokeWidth(1);
+        c.setStroke(colorstroke);
+        c.setStrokeType(StrokeType.INSIDE);
+        c.setStrokeWidth(5);
         this.d.setFill(color);
-        d.setStroke(Color.BLACK);
-        d.setStrokeWidth(1);
+        d.setStroke(colorstroke);
+        d.setStrokeType(StrokeType.INSIDE);
+        d.setStrokeWidth(5);
     }
     //Um zu wissen, wie man die Form rotieren muss
 

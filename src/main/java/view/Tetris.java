@@ -28,7 +28,12 @@ import javafx.stage.Stage;
 import model.Form;
 import model.Highscore;
 import model.Controller;
+
+import java.io.BufferedReader;
 import java.io.FileInputStream;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Timer;
@@ -56,6 +61,7 @@ public class Tetris extends Application {
     private VBox mainVBox;
     private HBox box;
     private HBox settingBox;
+
 
     private FileInputStream tetris_logo;
 
@@ -106,11 +112,15 @@ public class Tetris extends Application {
     private boolean mainpage = false;
     private boolean delay = false;
 
+    public ArrayList<Highscore> highscores;
+
     private Timer timer;
     private TimerTask task;
 
     //Start-Methode für Tetris-Game
     public void start(Stage stage) throws Exception {
+
+        highscores = new ArrayList<>();
 
         //Start-Seite
 
@@ -276,6 +286,41 @@ public class Tetris extends Application {
         HBox.setMargin(alignmentBox, new Insets(0, 0, 0, 100));
 
         //GameLoop
+
+        mainBox.setId("mainBox");
+        mainScene = new Scene(mainBox, 1024, 768);
+
+        //setOnAction (btnLevel + btnPlay)
+        btnLevel.setOnAction(event -> click_btnLevel());
+        btnPlay.setOnAction(event -> {
+            game=true;
+            mainpage = true;
+            if(txtName.getText().length() > 0 && txtName.getText().length() < 4) {
+                name = txtName.getText();
+                startGame(stage);
+                stage.setScene(mainScene);
+            } else {
+                Alert alert = new Alert(Alert.AlertType.ERROR);
+                alert.setTitle("INVALID NAME");
+                alert.setHeaderText("YOUR NAME IS TOO SHORT OR TOO LONG");
+                alert.setContentText("Pls change your name to one with atleast 1 character or less than 4 characters and try again");
+                alert.showAndWait();
+            }
+
+        });
+
+        //Scene + Stage
+        startScene = new Scene(box, 1024, 768);
+        startScene.getStylesheets().add("/style.css");
+        mainScene.getStylesheets().add("/style.css");
+        stage.setScene(startScene);
+        stage.getIcons().add(new Image(tetris_logo));
+        stage.setTitle("T e t r i s  -  G a m e");
+        stage.show();
+
+    }
+
+    public void startGame(Stage stageNew) {
         timer = new Timer();
         task = new TimerTask() {
             public void run() {
@@ -301,43 +346,74 @@ public class Tetris extends Application {
                             displayScore.setText(String.valueOf(score));
                             displayLines.setText(String.valueOf(lines));
                             displayLevel.setText(String.valueOf(level));
-                        } else if(!game){
+                        } else {
+                            highscores.add(new Highscore(txtName.getText(), score));
+                            try {
+                                saveGame();
+                            } catch (IOException e) {
+                                e.printStackTrace();
+                            }
+                            timer.cancel();
+                            timer.purge();
                             Alert alert = new Alert(Alert.AlertType.ERROR);
                             alert.setTitle("GAME OVER");
                             alert.setHeaderText("You have lost");
                             alert.setContentText("Do you want to play a new game?");
-                            //alert.showAndWait();
+                            alert.showAndWait();
+                            ArrayList<Node> rects = new ArrayList<>();
+                            for(Node node : group.getChildren()) {
+                                if(node instanceof Rectangle) {
+                                    rects.add(node);
+                                }
+                            }
+
+                            for(Node node : rects) {
+                                if(node instanceof Rectangle) {
+                                    group.getChildren().remove(node);
+                                }
+                            }
+
+                            ArrayList<Node> rectsNext = new ArrayList<>();
+                            for(Node node : paneNext.getChildren()) {
+                                if(node instanceof Rectangle) {
+                                    rectsNext.add(node);
+                                }
+                            }
+
+                            for(Node node : rectsNext) {
+                                if(node instanceof Rectangle) {
+                                    paneNext.getChildren().remove(node);
+                                }
+                            }
                             task.cancel();
-                            timer.cancel();
-                            timer.purge();
+                            for (int[] a : FIELD) {
+                                Arrays.fill(a, 0);
+                            }
+                            Form a = nextObj;
+                            group.getChildren().addAll(a.a, a.b, a.c, a.d);
+                            object = a;
+                            nextObj = Controller.makeRect();
+                            score = 0;
+                            displayScore.setText(String.valueOf(score));
+                            level = 0;
+                            displayLevel.setText(String.valueOf(level));
+                            lines = 0;
+                            displayLines.setText(String.valueOf(lines));
+                            stageNew.setScene(startScene);
+                            mainpage = false;
+                            delay = false;
+                            for (Highscore h:highscores) {
+                                System.out.println(h.toString());
+
+                            }
+
+
                         }
                     }
                 });
             }
         };
         timer.schedule(task, 0, 200);
-        mainBox.setId("mainBox");
-        mainScene = new Scene(mainBox, 1024, 768);
-
-        //setOnAction (btnLevel + btnPlay)
-        btnLevel.setOnAction(event -> click_btnLevel());
-        btnPlay.setOnAction(event -> {
-            mainpage = true;
-            if(txtName.getText().length() < 4) {
-                name = txtName.getText();
-            }
-            stage.setScene(mainScene);
-        });
-
-        //Scene + Stage
-        startScene = new Scene(box, 1024, 768);
-        startScene.getStylesheets().add("/style.css");
-        mainScene.getStylesheets().add("/style.css");
-        stage.setScene(startScene);
-        stage.getIcons().add(new Image(tetris_logo));
-        stage.setTitle("T e t r i s  -  G a m e");
-        stage.show();
-
     }
 
     //moveOnKeyPress
@@ -487,6 +563,56 @@ public class Tetris extends Application {
         }
     }
 
+    public static void saveGame() throws IOException {
+       // ArrayList<Tetris> players = getMovies();
+        String name = "movies2.txt";
+
+        //try (PrintWriter out = new PrintWriter(new FileWriter(name, true))) {
+            // prepare file handling
+
+            //for (Movie m: movies) {
+                // parse to string
+                //String line = m.title;
+                //line += "\t" + Integer.toString(m.year);
+                //line += "\t" + Double.toString(m.price);
+                // write string
+                //out.println(line);
+            }
+        //}
+
+    //}
+    public static void readTextFile2() throws IOException {
+
+        String name = "movies.txt";
+        //ArrayList<Movie> movies = new ArrayList<>(); // my data model
+        Path p = Path.of(name);
+
+        try (BufferedReader in = Files.newBufferedReader(p)) {
+
+            String line = in.readLine();
+
+            while (line != null) {
+
+                // parse data
+                String[] data = line.split("\t");
+                String title = data[0];
+                int year = Integer.parseInt(data[1]);
+                double price = Double.parseDouble(data[2]);
+
+               // movies.add(new Movie(title, year, price));
+
+                // get next line
+                line = in.readLine();
+            }
+            // in.close(); // do not need it, will be automatically closed (AutoClosable)
+
+            // reporting
+           // for (Movie m : movies) {
+              //  System.out.println(m);
+           // }
+        }
+
+    }
     //main
     public static void main(String[] args) {
         launch();
