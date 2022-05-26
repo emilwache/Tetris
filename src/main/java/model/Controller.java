@@ -123,17 +123,17 @@ public class Controller {
     public static Form makeHoldRect(){
         String form = Tetris.holdObject.getName();
         Rectangle a = new Rectangle();
-        a.setWidth(24);
-        a.setHeight(24);
+        a.setWidth(25);
+        a.setHeight(25);
         Rectangle b = new Rectangle();
-        b.setWidth(24);
-        b.setHeight(24);
+        b.setWidth(25);
+        b.setHeight(25);
         Rectangle c = new Rectangle();
-        c.setWidth(24);
-        c.setHeight(24);
+        c.setWidth(25);
+        c.setHeight(25);
         Rectangle d = new Rectangle();
-        d.setWidth(24);
-        d.setHeight(24);
+        d.setWidth(25);
+        d.setHeight(25);
         String name = "";
         switch (form) {
             case "i": // I-Shape

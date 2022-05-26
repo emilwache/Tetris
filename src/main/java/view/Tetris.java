@@ -29,9 +29,7 @@ import model.Form;
 import model.Highscore;
 import model.Controller;
 
-import java.io.BufferedReader;
-import java.io.FileInputStream;
-import java.io.IOException;
+import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.ArrayList;
@@ -44,7 +42,7 @@ public class Tetris extends Application {
 
     //Variablen für die Start-Seite
     private Scene startScene;
-    private ObservableList<Highscore> highscore;
+    private static ObservableList<Highscore> highscore;
 
     private Label lblName;
     private TextField txtName;
@@ -112,7 +110,8 @@ public class Tetris extends Application {
     private boolean mainpage = false;
     private boolean delay = false;
 
-    public ArrayList<Highscore> highscores;
+    public static ArrayList<Highscore> highscores;
+    public static ArrayList<Highscore> player;
 
     private Timer timer;
     private TimerTask task;
@@ -148,8 +147,7 @@ public class Tetris extends Application {
 
         //List View mit den HighScores der jeweiligen Personen
         highscore = FXCollections.observableArrayList(
-                new Highscore("Thomas", 300000),
-                new Highscore("Emil", 2)
+
         );
         scoreView = new ListView();
         scoreView.setPrefWidth(225);
@@ -216,9 +214,9 @@ public class Tetris extends Application {
 
         //MainSeite
         //Setzt alle Felder im Array auf 0
-         for (int[] a : FIELD) {
-             Arrays.fill(a, 0);
-         }
+        for (int[] a : FIELD) {
+            Arrays.fill(a, 0);
+        }
 
         //Fügt eine neue Form am Start des Spiels hinzu
         Form a = nextObj;
@@ -231,12 +229,12 @@ public class Tetris extends Application {
         group.setBorder(b);
         group.setPrefSize(XMAX, YMAX);
         group.setMaxSize(XMAX, YMAX);
-        
+
         //Hold-Label
         lblHold = new Label("hold");
         lblHold.getStyleClass().add("label-style");
         //Score-Label
-        lblScore = new Label ("score");
+        lblScore = new Label("score");
         lblScore.getStyleClass().add("label-style");
         //Level-Label
         lblLevel = new Label("level");
@@ -293,9 +291,9 @@ public class Tetris extends Application {
         //setOnAction (btnLevel + btnPlay)
         btnLevel.setOnAction(event -> click_btnLevel());
         btnPlay.setOnAction(event -> {
-            game=true;
+            game = true;
             mainpage = true;
-            if(txtName.getText().length() > 0 && txtName.getText().length() < 4) {
+            if (txtName.getText().length() > 0 && txtName.getText().length() < 4) {
                 name = txtName.getText();
                 startGame(stage);
                 stage.setScene(mainScene);
@@ -324,8 +322,7 @@ public class Tetris extends Application {
         timer = new Timer();
         task = new TimerTask() {
             public void run() {
-                if(!delay)
-                {
+                if (!delay) {
                     try {
                         //3-Sekunden Delay beim Start des Spiels
                         TimeUnit.SECONDS.sleep(3);
@@ -361,27 +358,27 @@ public class Tetris extends Application {
                             alert.setContentText("Do you want to play a new game?");
                             alert.showAndWait();
                             ArrayList<Node> rects = new ArrayList<>();
-                            for(Node node : group.getChildren()) {
-                                if(node instanceof Rectangle) {
+                            for (Node node : group.getChildren()) {
+                                if (node instanceof Rectangle) {
                                     rects.add(node);
                                 }
                             }
 
-                            for(Node node : rects) {
-                                if(node instanceof Rectangle) {
+                            for (Node node : rects) {
+                                if (node instanceof Rectangle) {
                                     group.getChildren().remove(node);
                                 }
                             }
 
                             ArrayList<Node> rectsNext = new ArrayList<>();
-                            for(Node node : paneNext.getChildren()) {
-                                if(node instanceof Rectangle) {
+                            for (Node node : paneNext.getChildren()) {
+                                if (node instanceof Rectangle) {
                                     rectsNext.add(node);
                                 }
                             }
 
-                            for(Node node : rectsNext) {
-                                if(node instanceof Rectangle) {
+                            for (Node node : rectsNext) {
+                                if (node instanceof Rectangle) {
                                     paneNext.getChildren().remove(node);
                                 }
                             }
@@ -402,7 +399,7 @@ public class Tetris extends Application {
                             stageNew.setScene(startScene);
                             mainpage = false;
                             delay = false;
-                            for (Highscore h:highscores) {
+                            for (Highscore h : highscores) {
                                 System.out.println(h.toString());
 
                             }
@@ -455,8 +452,8 @@ public class Tetris extends Application {
     }
 
     //holdForm: Speichert eine Form temporär
-    public void holdForm(){
-        if(paneHold.getChildren().isEmpty()){
+    public void holdForm() {
+        if (paneHold.getChildren().isEmpty()) {
             haschanged = true;
             holdObject = Controller.makeRectHold();
             paneHold.getChildren().addAll(holdObject.a, holdObject.b, holdObject.c, holdObject.d);
@@ -465,7 +462,7 @@ public class Tetris extends Application {
             nextObj = Controller.makeRect();
             object = a;
             group.getChildren().addAll(a.a, a.b, a.c, a.d);
-        } else if(!haschanged){
+        } else if (!haschanged) {
             haschanged = true;
             Form aktObj = Controller.makeRectHold(); //auf dem Spielfeld
             group.getChildren().removeAll(object.a, object.b, object.c, object.d);
@@ -478,38 +475,38 @@ public class Tetris extends Application {
     }
 
     // nextForm: Zeigt die nächste Form an
-    public void nextForm(){
-                nextObject = Controller.makeRectNext();
-                paneNext.getChildren().addAll(nextObject.a, nextObject.b, nextObject.c, nextObject.d);
+    public void nextForm() {
+        nextObject = Controller.makeRectNext();
+        paneNext.getChildren().addAll(nextObject.a, nextObject.b, nextObject.c, nextObject.d);
 
     }
 
     //click_btnLevel: Schwierigkeitsgrad auswählen
-    public void click_btnLevel(){
+    public void click_btnLevel() {
         String[] btnData = btnLevel.getText().split(" ");
-        if(Integer.parseInt(btnData[1]) == 20){
+        if (Integer.parseInt(btnData[1]) == 20) {
             btnLevel.setText("Level " + 1);
             level = 1;
             speed = 500;
 
-        } else if(Integer.parseInt(btnData[1]) == 1){
+        } else if (Integer.parseInt(btnData[1]) == 1) {
             btnLevel.setText("Level " + 5);
             level = 5;
             speed = 450;
-        } else{
+        } else {
             btnLevel.setText("Level " + (Integer.parseInt(btnData[1]) + 5));
             level += 5;
-            speed = 500 - level*10;
+            speed = 500 - level * 10;
         }
     }
 
     //pauseOnEscape: Pausiert das Spiel, wenn man ESC drückt.
-    public void pauseOnEscape(){
-       Alert alert = new Alert(Alert.AlertType.INFORMATION);
-       alert.setTitle("Game-Pause");
-       alert.setHeaderText("The game is paused!");
-       alert.setContentText("Do you want to continue?");
-       alert.showAndWait();
+    public void pauseOnEscape() {
+        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+        alert.setTitle("Game-Pause");
+        alert.setHeaderText("The game is paused!");
+        alert.setContentText("Do you want to continue?");
+        alert.showAndWait();
     }
 
     //removeRows: Löscht eine Reihe, wenn diese auf der Y-Achse voll ist.
@@ -524,7 +521,7 @@ public class Tetris extends Application {
                 if (FIELD[j][i] == 1)
                     full++;
             }
-            if (full == FIELD.length){
+            if (full == FIELD.length) {
                 line.add(i);
                 allLines++;
                 score += 100;
@@ -532,7 +529,7 @@ public class Tetris extends Application {
             }
             full = 0;
         }
-        if(allLines > 0){
+        if (allLines > 0) {
             for (Node node : pane.getChildren()) {
                 if (node instanceof Rectangle)
                     rects.add(node);
@@ -540,81 +537,67 @@ public class Tetris extends Application {
 
             for (Node node : rects) {
                 Rectangle a = (Rectangle) node;
-                if(node instanceof Rectangle){
-                    if (a.getY() >= line.get(0) * SIZE && a.getY() <= line.get(line.size()-1) * SIZE) {
+                if (node instanceof Rectangle) {
+                    if (a.getY() >= line.get(0) * SIZE && a.getY() <= line.get(line.size() - 1) * SIZE) {
                         System.out.print("remove node ");
                         pane.getChildren().remove(node);
-                        FIELD[(int) a.getX()/SIZE][(int) a.getY()/SIZE] = 0;
+                        FIELD[(int) a.getX() / SIZE][(int) a.getY() / SIZE] = 0;
                     }
                 }
             }
 
-             for(Node node : pane.getChildren()){
-                 Rectangle a = (Rectangle) node;
-                 if(node instanceof Rectangle){
-                     if(a.getY()/SIZE < line.get(0)){
-                         FIELD[(int) a.getX()/SIZE][(int) a.getY()/SIZE] = 0;
-                         FIELD[(int) a.getX()/SIZE][(int) a.getY()/SIZE + allLines] = 1;
-                         a.setY(a.getY() + SIZE * allLines);
-                         System.out.print("move node ");
-                     }
-                 }
-             }
+            for (Node node : pane.getChildren()) {
+                Rectangle a = (Rectangle) node;
+                if (node instanceof Rectangle) {
+                    if (a.getY() / SIZE < line.get(0)) {
+                        FIELD[(int) a.getX() / SIZE][(int) a.getY() / SIZE] = 0;
+                        FIELD[(int) a.getX() / SIZE][(int) a.getY() / SIZE + allLines] = 1;
+                        a.setY(a.getY() + SIZE * allLines);
+                        System.out.print("move node ");
+                    }
+                }
+            }
         }
     }
 
     public static void saveGame() throws IOException {
-       // ArrayList<Tetris> players = getMovies();
-        String name = "movies2.txt";
+        ArrayList<Highscore> players = highscores;
+        String name = "highscore.csv";
 
-        //try (PrintWriter out = new PrintWriter(new FileWriter(name, true))) {
-            // prepare file handling
-
-            //for (Movie m: movies) {
-                // parse to string
-                //String line = m.title;
-                //line += "\t" + Integer.toString(m.year);
-                //line += "\t" + Double.toString(m.price);
-                // write string
-                //out.println(line);
+        try (PrintWriter out = new PrintWriter(new FileWriter(name, true))) {
+            for (Highscore h : players) {
+            String line = h.getName();
+            line += "\t\t\t" + h.getScore();
+            out.println(line);
             }
-        //}
-
-    //}
-    public static void readTextFile2() throws IOException {
-
-        String name = "movies.txt";
-        //ArrayList<Movie> movies = new ArrayList<>(); // my data model
-        Path p = Path.of(name);
-
-        try (BufferedReader in = Files.newBufferedReader(p)) {
-
-            String line = in.readLine();
-
-            while (line != null) {
-
-                // parse data
-                String[] data = line.split("\t");
-                String title = data[0];
-                int year = Integer.parseInt(data[1]);
-                double price = Double.parseDouble(data[2]);
-
-               // movies.add(new Movie(title, year, price));
-
-                // get next line
-                line = in.readLine();
-            }
-            // in.close(); // do not need it, will be automatically closed (AutoClosable)
-
-            // reporting
-           // for (Movie m : movies) {
-              //  System.out.println(m);
-           // }
         }
+    }
+        public static ArrayList readTextFile () throws IOException {
 
+            String name = "highscore.csv";
+            player = new ArrayList<>();
+            Path p = Path.of(name);
+
+            try (BufferedReader in = Files.newBufferedReader(p)) {
+
+                String line = in.readLine();
+
+                while (line != null) {
+
+                    String[] data = line.split("\t");
+                    String nameData = data[0];
+                    int scoreData = Integer.parseInt(data[1]);
+
+                    player.add(new Highscore(nameData, scoreData));
+
+                    line = in.readLine();
+                }
+
+                }
+                return player;
+            }
+        //main
+        public static void main (String[]args){
+            launch();
+        }
     }
-    //main
-    public static void main(String[] args) {
-        launch();
-    }
-}
