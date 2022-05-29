@@ -42,6 +42,7 @@ public class Tetris extends Application {
 
     //Variablen für die Start-Seite
     private Scene startScene;
+    private static ArrayList<Highscore> highscoreArr;
     private static ObservableList<Highscore> highscore;
 
     private Label lblName;
@@ -146,9 +147,14 @@ public class Tetris extends Application {
         btnLevel.getStyleClass().add("start-buttons");
 
         //List View mit den HighScores der jeweiligen Personen
-        highscore = FXCollections.observableArrayList(
+        highscoreArr = new ArrayList<>();
+        highscoreArr.addAll(readTextFile());
 
-        );
+        System.out.println(highscoreArr);
+        highscore = FXCollections.observableArrayList();
+        for (Highscore h : highscoreArr) {
+            highscore.add(h);
+        }
         scoreView = new ListView();
         scoreView.setPrefWidth(225);
         scoreView.setMaxHeight(300);
@@ -293,18 +299,17 @@ public class Tetris extends Application {
         btnPlay.setOnAction(event -> {
             game = true;
             mainpage = true;
-            if (txtName.getText().length() > 0 && txtName.getText().length() < 4) {
+            if (txtName.getText().length() == 3) {
                 name = txtName.getText();
                 startGame(stage);
                 stage.setScene(mainScene);
             } else {
                 Alert alert = new Alert(Alert.AlertType.ERROR);
                 alert.setTitle("INVALID NAME");
-                alert.setHeaderText("YOUR NAME IS TOO SHORT OR TOO LONG");
-                alert.setContentText("Pls change your name to one with atleast 1 character or less than 4 characters and try again");
+                alert.setHeaderText("your name might is too short/long");
+                alert.setContentText("Pls change your name! It has to be 3 characters long.");
                 alert.showAndWait();
             }
-
         });
 
         //Scene + Stage
@@ -401,9 +406,12 @@ public class Tetris extends Application {
                             delay = false;
                             for (Highscore h : highscores) {
                                 System.out.println(h.toString());
-
                             }
-
+                            ObservableList<Highscore> highscore_clone = FXCollections.observableArrayList();
+                            highscore_clone.addAll(highscore);
+                            highscore_clone.add(highscores.get(highscores.size() - 1));
+                            highscore.clear();
+                            highscore.addAll((highscore_clone));
 
                         }
                     }
@@ -572,7 +580,7 @@ public class Tetris extends Application {
             }
         }
     }
-        public static ArrayList readTextFile () throws IOException {
+        public static ArrayList<Highscore> readTextFile () throws IOException {
 
             String name = "highscore.csv";
             player = new ArrayList<>();
@@ -584,7 +592,7 @@ public class Tetris extends Application {
 
                 while (line != null) {
 
-                    String[] data = line.split("\t");
+                    String[] data = line.split("\t\t\t");
                     String nameData = data[0];
                     int scoreData = Integer.parseInt(data[1]);
 
