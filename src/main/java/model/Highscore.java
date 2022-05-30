@@ -33,6 +33,6 @@ public class Highscore {
 
     //ToString Methode
     public String toString() {
-    return " " + name + "\t\t\t" +  score;
+    return " " + name + "\t\t\t\t" +  score;
     }
 }

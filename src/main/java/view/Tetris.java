@@ -23,19 +23,16 @@ import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
-import javafx.scene.text.Font;
 import javafx.stage.Stage;
 import model.Form;
 import model.Highscore;
 import model.Controller;
+import model.HighscoreComperator;
 
 import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Timer;
-import java.util.TimerTask;
+import java.util.*;
 import java.util.concurrent.TimeUnit;
 
 public class Tetris extends Application {
@@ -49,7 +46,7 @@ public class Tetris extends Application {
     private TextField txtName;
     private Button btnPlay;
     private Button btnLevel;
-    private ListView scoreView;
+    private ListView<Highscore> scoreView;
     private Button btnSettings;
 
     private VBox nameBox;
@@ -152,13 +149,18 @@ public class Tetris extends Application {
 
         System.out.println(highscoreArr);
         highscore = FXCollections.observableArrayList();
+        int in = 0;
         for (Highscore h : highscoreArr) {
-            highscore.add(h);
+            if(in < 8) {
+                highscore.add(h);
+            }
+            in++;
         }
-        scoreView = new ListView();
+        scoreView = new ListView<Highscore>();
         scoreView.setPrefWidth(225);
-        scoreView.setMaxHeight(300);
-        scoreView.setMinHeight(300);
+        scoreView.setPrefHeight(220);
+        scoreView.setMaxHeight(220);
+        scoreView.setMinHeight(220);
         scoreView.setItems(highscore);
         scoreView.setId("listView");
 
@@ -173,23 +175,15 @@ public class Tetris extends Application {
         //Icon image
         tetris_logo = new FileInputStream("src/main/resources/images/tetris_icon.png");
 
-        //Settings-Button
-        btnSettings = new Button();
-        btnSettings.getStyleClass().add("start-buttons");
-        btnSettings.setGraphic(settingView);
-        btnSettings.setPrefWidth(50);
-        btnSettings.setPrefHeight(50);
-        HBox.setMargin(btnSettings, new Insets(10));
 
         //VBoxen
         nameBox = new VBox(10, lblName, txtName);
         playBox = new VBox(10, btnPlay);
         lvlBox = new VBox(10, btnLevel);
         scoreBox = new VBox(10, scoreView);
-        settingBox = new HBox(10, btnSettings);
 
         //Main-Vboxen
-        smallBox = new VBox(nameBox, playBox, lvlBox, scoreBox, settingBox);
+        smallBox = new VBox(nameBox, playBox, lvlBox, scoreBox);
         smallBox.setPrefWidth(300);
         smallBox.setPrefHeight(500);
         smallBox.setId("smallBox");
@@ -211,12 +205,9 @@ public class Tetris extends Application {
         nameBox.setAlignment(Pos.CENTER);
         lvlBox.setAlignment(Pos.CENTER);
         scoreBox.setAlignment(Pos.CENTER);
-        settingBox.setAlignment(Pos.CENTER);
         box.setAlignment(Pos.CENTER);
         VBox.setMargin(playBox, new Insets(10));
         VBox.setMargin(scoreBox, new Insets(10, 0, 0, 0));
-
-        //Option Scene
 
         //MainSeite
         //Setzt alle Felder im Array auf 0
@@ -404,14 +395,19 @@ public class Tetris extends Application {
                             stageNew.setScene(startScene);
                             mainpage = false;
                             delay = false;
-                            for (Highscore h : highscores) {
-                                System.out.println(h.toString());
-                            }
                             ObservableList<Highscore> highscore_clone = FXCollections.observableArrayList();
                             highscore_clone.addAll(highscore);
                             highscore_clone.add(highscores.get(highscores.size() - 1));
                             highscore.clear();
-                            highscore.addAll((highscore_clone));
+                            Collections.sort(highscore_clone, new HighscoreComperator());
+                            int in = 0;
+                            for (Highscore h : highscore_clone) {
+                                if(in < 8) {
+                                    System.out.println(h);
+                                    highscore.add(h);
+                                }
+                                in++;
+                            }
 
                         }
                     }
@@ -602,6 +598,7 @@ public class Tetris extends Application {
                 }
 
                 }
+                Collections.sort(player, new HighscoreComperator());
                 return player;
             }
         //main
