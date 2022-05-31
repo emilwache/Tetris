@@ -379,6 +379,18 @@ public class Tetris extends Application {
                                     paneNext.getChildren().remove(node);
                                 }
                             }
+                            ArrayList<Node> rectsHold = new ArrayList<>();
+                            for (Node node : paneHold.getChildren()) {
+                                if (node instanceof Rectangle) {
+                                    rectsHold.add(node);
+                                }
+                            }
+
+                            for (Node node : rectsHold) {
+                                if (node instanceof Rectangle) {
+                                    paneHold.getChildren().remove(node);
+                                }
+                            }
                             task.cancel();
                             for (int[] a : FIELD) {
                                 Arrays.fill(a, 0);
