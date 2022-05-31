@@ -125,7 +125,7 @@ public class Form {
         this.name = name;
     }
 
-    public void setForm(int form){
+    public void setForm(int form) {
         this.form = form;
     }
 

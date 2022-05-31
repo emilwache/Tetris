@@ -1,9 +1,10 @@
 /**
-* @author Thomas Szhukalek, Emil Wache
-* Tetris-Game
-*/
+ * @author Thomas Szhukalek, Emil Wache
+ * Tetris-Game
+ */
 package view;
 //imports
+
 import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
@@ -151,7 +152,7 @@ public class Tetris extends Application {
         highscore = FXCollections.observableArrayList();
         int in = 0;
         for (Highscore h : highscoreArr) {
-            if(in < 8) {
+            if (in < 8) {
                 highscore.add(h);
             }
             in++;
@@ -402,7 +403,7 @@ public class Tetris extends Application {
                             Collections.sort(highscore_clone, new HighscoreComperator());
                             int in = 0;
                             for (Highscore h : highscore_clone) {
-                                if(in < 8) {
+                                if (in < 8) {
                                     System.out.println(h);
                                     highscore.add(h);
                                 }
@@ -570,39 +571,41 @@ public class Tetris extends Application {
 
         try (PrintWriter out = new PrintWriter(new FileWriter(name, true))) {
             for (Highscore h : players) {
-            String line = h.getName();
-            line += "\t\t\t" + h.getScore();
-            out.println(line);
+                String line = h.getName();
+                line += "\t\t\t" + h.getScore();
+                out.println(line);
             }
         }
     }
-        public static ArrayList<Highscore> readTextFile () throws IOException {
 
-            String name = "highscore.csv";
-            player = new ArrayList<>();
-            Path p = Path.of(name);
+    public static ArrayList<Highscore> readTextFile() throws IOException {
 
-            try (BufferedReader in = Files.newBufferedReader(p)) {
+        String name = "highscore.csv";
+        player = new ArrayList<>();
+        Path p = Path.of(name);
 
-                String line = in.readLine();
+        try (BufferedReader in = Files.newBufferedReader(p)) {
 
-                while (line != null) {
+            String line = in.readLine();
 
-                    String[] data = line.split("\t\t\t");
-                    String nameData = data[0];
-                    int scoreData = Integer.parseInt(data[1]);
+            while (line != null) {
 
-                    player.add(new Highscore(nameData, scoreData));
+                String[] data = line.split("\t\t\t");
+                String nameData = data[0];
+                int scoreData = Integer.parseInt(data[1]);
 
-                    line = in.readLine();
-                }
+                player.add(new Highscore(nameData, scoreData));
 
-                }
-                Collections.sort(player, new HighscoreComperator());
-                return player;
+                line = in.readLine();
             }
-        //main
-        public static void main (String[]args){
-            launch();
+
         }
+        Collections.sort(player, new HighscoreComperator());
+        return player;
     }
+
+    //main
+    public static void main(String[] args) {
+        launch();
+    }
+}

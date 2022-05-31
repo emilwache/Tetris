@@ -6,11 +6,11 @@ public class HighscoreComperator implements Comparator<Highscore> {
 
     @Override
     public int compare(Highscore h1, Highscore h2) {
-        if(h1.getScore() > h2.getScore()){
+        if (h1.getScore() > h2.getScore()) {
             return -1;
-        } else if(h1.getScore() < h2.getScore()){
+        } else if (h1.getScore() < h2.getScore()) {
             return 1;
-        } else{
+        } else {
             return 0;
         }
     }
